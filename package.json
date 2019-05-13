@@ -1,0 +1,22 @@
+{
+  "name": "shodan",
+  "version": "1.0.1",
+  "description": "A complete rewrite of my first Discord Bot and overall code project",
+  "main": "src/bot.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "Axel Greavette",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "discord.js": "^11.4.2",
+    "dotenv": "^8.0.0",
+    "winston": "^3.2.1"
+  },
+  "bot": {
+    "admins": [
+      "228872946557386752"
+    ]
+  }
+}
