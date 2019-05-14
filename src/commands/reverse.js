@@ -5,6 +5,7 @@ module.exports = {
     usage: "[STRING]",
     cooldown: 5,
     guildOnly: false,
+    disabled: true,
     execute(message, args, client, logger) {
         if(args.length > 1) args = args.join(" ");
         logger.log("info", args);

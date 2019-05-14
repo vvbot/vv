@@ -3,17 +3,14 @@ const { RichEmbed } = require("discord.js");
 module.exports = {
     name: "avatar",
     description: "Returns the avatar of the given user or yourself",
-    args: true,
-    usage: "[USERNAME OR MENTION (Optional)]",
+    usage: "[USERNAME OR MENTION (OPTIONAL)]",
     guildOnly: false,
-    hidden: true,
-    adminOnly: true,
-    disabled: true,
     execute(message, args, client, logger) {
-        const embed = new RichEmbed()
+        const member = client.findMember(message, args[0], true);
+        const embed = client.defualtEmbed
+            .setTitle(`${member.displayName}'s avatar:`)
             .setColor("RANDOM")
-            .setImage(args[0] ? client.users.get(args[0].match(client.regexs.mention)).displayAvatarURL : message.author.displayAvatarURL)
-            logger.log("info", client.users.get(args[0]));
-            return message.channel.send(message.author.displayAvatarURL);
+            .setImage(member.user.displayAvatarURL)
+        return message.channel.send(embed);
     }
 }

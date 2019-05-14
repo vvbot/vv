@@ -1,4 +1,5 @@
 const { BOT_PREFIX } = process.env;
+const { RichEmbed } = require("discord.js");
 
 module.exports = {
     name: "help",
@@ -10,17 +11,21 @@ module.exports = {
         const body = [];
         const { commands } = message.client;
 
+        const embed = client.defualtEmbed
+            .setTitle("Help has been sent to your DMs via a Cortex Reaver")
+            .setThumbnail("https://vignette.wikia.nocookie.net/shodan/images/d/da/CortexReaver_Icon.png/revision/latest?cb=20160718025241")
+
         if(!args.length) {
             body.push("Here is a list of all my functions:\n");
             body.push(commands.filter(command => {
                 if (command.hidden && command.hidden === true || command.disabled && command.disabled === true) return false;
                 return true
-            }).map(command => `**${command.name}**: ${command.description}`).join("\n"));
+            }).map(command => `**${command.name}** :: ${command.description}`).join("\n"));
             body.push(`\nYou can utilise \`${BOT_PREFIX}help [COMMAND NAME]\` for further information`);
 
             return message.author.send(body, { split: true}).then(() => {
                 if (message.channel.type === "dm") return;
-                message.channel.send("I've sent you a DM containing information regarding my functions");
+                message.channel.send(embed);
             }).catch(e => {
                 console.error(`Was unable to send \`HELP DM\` to ${message.author.tag}.\n`, e);
                 message.reply("I was unable to DM you. Please check you have DMs enabled.");
