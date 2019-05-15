@@ -2,7 +2,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "apod",
-    description: "Returns the Astronomy Picture of the Day.",
+    description: "Returns the Astronomy Picture of the Day",
     args: false,
     usage: "",
     cooldown: 5,

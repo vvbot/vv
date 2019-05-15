@@ -1,4 +1,4 @@
-const { BOT_PREFIX } = process.env;
+const { prefix } = require("../../config.json").bot;
 const { RichEmbed } = require("discord.js");
 
 module.exports = {
@@ -21,7 +21,7 @@ module.exports = {
                 if (command.hidden && command.hidden === true || command.disabled && command.disabled === true) return false;
                 return true
             }).map(command => `**${command.name}** :: ${command.description}`).join("\n"));
-            body.push(`\nYou can utilise \`${BOT_PREFIX}help [COMMAND NAME]\` for further information`);
+            body.push(`\nYou can utilise \`${prefix}help [COMMAND NAME]\` or \`${client.user}help [COMMAND NAME]\` for further information`);
 
             return message.author.send(body, { split: true}).then(() => {
                 if (message.channel.type === "dm") return;
@@ -41,7 +41,7 @@ module.exports = {
 
         if (command.aliases) body.push(`**Aliases:** ${command.aliases.join(', ')}`);
         if (command.description) body.push(`**Description:** ${command.description}`);
-        if (command.usage) body.push(`**Usage:** ${BOT_PREFIX}${command.name} ${command.usage}`);
+        if (command.usage) body.push(`**Usage:** ${prefix}${command.name} ${command.usage}`);
         
         body.push(`**Cooldown**: ${command.cooldown || 3} second(s)`);
 

@@ -2,7 +2,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "meme",
-    description: "Returns a simple text-based meme.",
+    description: "Returns a simple text-based meme",
     args: false,
     usage: "",
     cooldown: 5,

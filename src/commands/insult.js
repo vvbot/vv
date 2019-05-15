@@ -2,7 +2,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "insult",
-    description: "Insults someone.",
+    description: "Insults someone",
     args: true,
     usage: "[USER]",
     cooldown: 5,

@@ -1,0 +1,10 @@
+{
+    "bot": {
+        "admins": [
+            "228872946557386752"
+        ],
+        "prefix": "s_",
+        "debug_mode": false,
+        "log_file_name": "log.txt"
+    }
+}

@@ -1,6 +1,6 @@
 module.exports = {
     name: "id",
-    description: "Finds the id of the mentioned user, yourself, or the linked channel.",
+    description: "Finds the id of the mentioned user, yourself, or the linked channel",
     args: false,
     usage: "[-C|-S|-G] [MENTION (OPTIONAL)]",
     cooldown: 5,

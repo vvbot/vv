@@ -1,6 +1,6 @@
 module.exports = {
     name: "guildinfo",
-    description: "Retrieves information about the current guild.",
+    description: "Retrieves information about the current guild",
     args: false,
     usage: "",
     cooldown: 5,

@@ -1,6 +1,6 @@
 module.exports = {
     name: "guildemojis",
-    description: "Lists all emojis that can be found in the current server.",
+    description: "Lists all emojis that can be found in the current server",
     args: false,
     usage: "",
     cooldown: 5,

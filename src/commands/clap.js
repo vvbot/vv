@@ -1,6 +1,6 @@
 module.exports = {
     name: "clap",
-    description: "Adds some 👏 to your strings.",
+    description: "Adds some 👏 to your strings",
     aliases: ["clapme"],
     args: true,
     usage: "[STRING]",
