@@ -8,7 +8,7 @@ module.exports = {
     cooldown: 5,
     adminOnly: true,
     preventDefualtError: true,
-    execute(message, args, client, logger) {
+    execute(message, args, client, logger, Discord) {
         try {
             const code = args.join(" ");
             let evaled = eval(code);
