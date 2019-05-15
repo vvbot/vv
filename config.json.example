@@ -1,0 +1,14 @@
+{
+    "bot": {
+        "token": "Bot Token",
+        "admins": [
+            "228872946557386752"
+        ],
+        "prefix": "s$",
+        "debug_mode": true,
+        "log_file_name": "log.txt"
+    },
+    "web": {
+        "chewey-bot": "Chewey Bot API Token"
+    }
+}

@@ -18,7 +18,7 @@ module.exports = {
         if(!args.length) {
             body.push("Here is a list of all my functions:\n");
             body.push(commands.filter(command => {
-                if (command.hidden && command.hidden === true || command.disabled && command.disabled === true) return false;
+                if (command.hidden|| command.disabled || command.adminOnly) return false;
                 return true
             }).map(command => `**${command.name}** :: ${command.description}`).join("\n"));
             body.push(`\nYou can utilise **${prefix}help [COMMAND NAME]** or **${client.user}help [COMMAND NAME]** for further information`);

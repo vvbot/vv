@@ -4,11 +4,11 @@ module.exports = {
     name: "exec",
     description: "Load a file within the commands folder.",
     args: false,
-    usage: "",
+    usage: "[COMMAND]",
     cooldown: 5,
     adminOnly: true,
     preventDefualtError: true,
-    execute(message, args, client, logger, Discord) {
+    execute(message, args, client, logger) {
         try {
             const cmd = args.join(" ");
             exec(`${cmd}`, (error, stdout, stderr) => {

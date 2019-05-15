@@ -1,7 +1,6 @@
 require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
-const { BOT_TOKEN } = process.env;
 const { join } = require("path");
 const package = require("../package.json");
 const config = require("../config.json");
@@ -77,15 +76,15 @@ client.on("message", message => {
     if (command.args && !args.length) {
         let reply = `No arguments were provided`;
 
-        if (command.usage) reply += `\nThe proper usage of that command is: \`${config.bot.prefix}${command.name} ${command.usage}\``;
+        if (command.usage) reply += `\nThe proper usage of that function is: \`${config.bot.prefix}${command.name} ${command.usage}\``;
 
         message.channel.send(reply);
     }
 
 
     if (command.guildOnly && message.channel.type !== "text") return message.channel.send("Please try executing this command inside a Guild.");
-    if (command.disabled && command.disabled === true && !config.bot.admins.includes(message.author.id)) return;
-    if (command.adminOnly && command.adminOnly === true && !config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunatly ${message.author} you lack the required clearance level for this command. Try contactign a system administrator for further assistance`);
+    if (command.disabled && !config.bot.admins.includes(message.author.id)) return;
+    if (command.adminOnly && !config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunatly ${message.author} you lack the required clearance level for this command. Try contactign a system administrator for further assistance`);
     
     if (!cooldowns.has(command.name)) {
         cooldowns.set(command.name, new Discord.Collection());
@@ -104,7 +103,7 @@ client.on("message", message => {
         }
     }
 
-    timestamps.set(message.author.id, now);
+    if(!config.bot.admins.includes(message.author.id)) timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownTime);
 
     try {
@@ -124,4 +123,4 @@ client.on("error", m => logger.error(chalk.redBright(m)));
 
 process.on("uncaughtException", error => logger.error(chalk.redBright(error)));
 
-client.login(BOT_TOKEN);
+client.login(config.bot.token);
