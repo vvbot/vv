@@ -13,7 +13,7 @@ module.exports = {
             const cmd = args.join(" ");
             exec(`${cmd}`, (error, stdout, stderr) => {
                 if(error) return error;
-                return message.channel.send(client.clean(stdout), { split: true })
+                return message.channel.send(client.clean(stdout), { code: "xl", split: true })
             })
         } catch (err) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);
