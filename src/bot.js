@@ -109,7 +109,7 @@ client.on("message", message => {
 
     try {
         message.channel.startTyping();
-        command.execute(message, args, client, logger);
+        command.execute(message, args, client, logger, Discord);
         message.channel.stopTyping();
     } catch (error) {
         if(command.preventDefualtError === true) return;
