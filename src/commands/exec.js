@@ -1,5 +1,7 @@
+cnst { exec } = require("child_process");
+
 module.exports = {
-    name: "eval",
+    name: "exec",
     description: "Load a file within the commands folder.",
     args: false,
     usage: "",
@@ -8,14 +10,12 @@ module.exports = {
     preventDefualtError: true,
     execute(message, args, client, logger, Discord) {
         try {
-            const code = args.join(" ");
-            let evaled = eval(code);
-
-            if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
-
-            
-            return message.channel.send(client.clean(evaled), { code: "xl", split: true });
-        } catch(err) {
+            const cmd = args.join(" ");
+            exec(`${cmd}`, (error, stdout, stderr) => {
+                if(error) return error;
+                return message.channel.send(client.clean(stdout), { split: true })
+            })
+        } catch (err) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);
         }
     }
