@@ -19,8 +19,8 @@ module.exports = {
             client.sql.query(`SELECT * FROM updates ORDER BY id DESC LIMIT 1`, (error, rows, fields) => {
                 if (error) throw error;
                 const embed = new RichEmbed()
-                    .setTitle(`Update v${rows[0].id}`)
-                    .setDescription(`**Title:** ${rows[0].title}\n\n**Description:** ${rows[0].description}`)
+                    .setTitle(`Update v${rows[0].id} - ${rows[0].title}`)
+                    .setDescription(`**Description:** ${rows[0].description}`)
                 client.fixEmbed(embed);
                 return message.channel.send(embed);
             });

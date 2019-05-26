@@ -1,6 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
 const Discord = require("discord.js");
+const sh0danClient = require("./struct/Client");
 const { join } = require("path");
 const package = require("../package.json");
 const config = require("../config.json");
@@ -8,12 +9,6 @@ const winston = require("winston");
 const chalk = require("chalk");
 const _mysql = require("mysql2");
 
-const connection = _mysql.createConnection({
-    host: config.mysql.host,
-    user: config.mysql.username,
-    password: config.mysql.password,
-    database: config.mysql.database
-});
 
 const logger = winston.createLogger({
     transports: [
@@ -25,39 +20,7 @@ const logger = winston.createLogger({
 
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-const client = new Discord.Client();
-client.commandsFolder = join(__dirname, "commands");
-client.commands = new Discord.Collection();
-const Commands = fs.readdirSync(client.commandsFolder).filter(file => file.endsWith(".js"));
-const cooldowns = new Discord.Collection();
-
-client.findMember = (msg, suffix, self = false) => {
-    if (!suffix) {
-        if (self) return msg.member
-        else return null
-    } else {
-        let member = msg.mentions.members.first() || msg.guild.members.get(suffix) || msg.guild.members.find(m => m.displayName.toLowerCase().includes(suffix.toLowerCase()) || m.user.username.toLowerCase().includes(suffix.toLowerCase()));
-        return member
-    }
-}
-
-client.clean = text => {
-    if(typeof(text) === "string") return text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-    else return text;
-}
-
-client.fixEmbed = embed => {
-    embed
-        .setColor("RANDOM")
-        .setAuthor(client.user.username, client.user.displayAvatarURL)
-}
-
-for (const File of Commands) {
-    const cmd = require(`./commands/${File}`);
-
-    client.commands.set(cmd.name, cmd);
-}
-
+const client = new sh0danClient();
 
 client.once("ready", async () => {
     logger.info(`${chalk.magenta(client.user.username)} is online`);
@@ -70,11 +33,10 @@ client.once("ready", async () => {
 
     client.user.setActivity("wi7h Axe1");
 
-    connection.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, (error) => {
+    client.sql.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, (error) => {
         if(error) return logger.error(chalk.redBright(error));
     });
 
-    client.sql = connection;
 });
 
 client.on("message", async message => {
@@ -103,12 +65,12 @@ client.on("message", async message => {
     if (command.disabled && !config.bot.admins.includes(message.author.id)) return;
     if (command.adminOnly && !config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunatly ${message.author} you lack the required clearance level for this command. Try contactign a system administrator for further assistance`);
     
-    if (!cooldowns.has(command.name)) {
-        cooldowns.set(command.name, new Discord.Collection());
+    if (!client.cooldowns.has(command.name)) {
+        client.cooldowns.set(command.name, new Discord.Collection());
     }
 
     const now = Date.now();
-    const timestamps = cooldowns.get(command.name);
+    const timestamps = client.cooldowns.get(command.name);
     const cooldownTime = (command.cooldown || 3) * 1000;
 
     if (timestamps.has(message.author.id)) {
@@ -125,17 +87,17 @@ client.on("message", async message => {
 
     try {
         message.channel.startTyping();
-        command.execute(message, args, client, logger, Discord, connection);
+        command.execute(message, args, client, logger, Discord);
         message.channel.stopTyping();
 
-        connection.query(`UPDATE analytics SET commands_ran = commands_ran + 1 WHERE bot ="shodan"`, (error) => {
+        client.sql.query(`UPDATE analytics SET commands_ran = commands_ran + 1 WHERE bot ="shodan"`, (error) => {
             if (error) return logger.error(chalk.redBright(error));
         });
     } catch (error) {
         if(command.preventDefualtError === true) return;
         logger.log("error", chalk.redBright(error));
         message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily");
-        connection.query(`UPDATE analytics SET commands_failed = commands_failed + 1 WHERE bot ="shodan"`, (error) => {
+        client.sql.query(`UPDATE analytics SET commands_failed = commands_failed + 1 WHERE bot ="shodan"`, (error) => {
             if (error) return logger.error(chalk.redBright(error));
         });
     }
