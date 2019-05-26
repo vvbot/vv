@@ -1,13 +1,10 @@
 require("dotenv").config();
-const fs = require("fs");
 const Discord = require("discord.js");
 const sh0danClient = require("./struct/Client");
-const { join } = require("path");
 const package = require("../package.json");
 const config = require("../config.json");
 const winston = require("winston");
 const chalk = require("chalk");
-const _mysql = require("mysql2");
 
 
 const logger = winston.createLogger({
