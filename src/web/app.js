@@ -87,5 +87,5 @@ module.exports = client => {
         res.redirect("https://discord.gg/2ZR6yKr");
     })
 
-    app.listen(process.env.port || config.web.port || 8080);
+    app.listen(config.web.port || process.env.port || 8685);
 }
