@@ -1,3 +1,5 @@
+const { RichEmbed } = require("discord.js");
+
 module.exports = {
     name: "catus",
     description: "Returns cat version of the HTTP error provided",
@@ -6,9 +8,10 @@ module.exports = {
     usage: "[HTTP ERROR CODE]",
     cooldown: 5,
     async execute(message, args, client, logger) {
-        const embed = client.defualtEmbed
+        const embed = new RichEmbed()
             .setTitle("Your logo is served:")
             .setImage(`https://http.cat/${args[0]}`)
+        client.fixEmbed(embed);
         return message.channel.send(embed);
     }
 }

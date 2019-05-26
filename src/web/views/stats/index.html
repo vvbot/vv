@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>Statistics - SHODAN</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+  <meta property="og:image" content=".././imgs/favicon.png" />
+  <link rel="shortcut icon" href=".././imgs/favicon.png" /></a>
+
+</head>
+
+<body>
+  <div class="main-head">
+    <div class="center">
+      <a href="https://shodanbot.com/"><img src=".././imgs/logo.png" style="padding-bottom: 20px;width: 20%;height: 20%;" ondragstart="return false;"></a>
+              <p style="font-size: 20px; color:white;">All statistics up to date on page load</p>
+    </div>
+  </div>
+
+  <div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><img src=".././imgs/cricon.png" class="center staticon" ondragstart="return false;"><br />API Uptime:</h5>
+        <p class="card-text" id="api">{{uptime}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-code-branch center staticon"></i><br />API Endpoints:</h5>
+        <p class="card-text">{{endpoints}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><img src=".././imgs/favicon.png" class="center staticon" ondragstart="return false;"><br />Bot Uptime:</h5>
+        <p class="card-text" id="bot">{{uptime}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-users center staticon"></i><br />Bot Users:</h5>
+        <p class="card-text">{{users}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-terminal center staticon"></i><br /> Bot Commands:</h5>
+        <p class="card-text">{{commands}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-server center staticon"></i><br />Bot Servers:</h5>
+        <p class="card-text">{{guilds}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+<footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+</footer>
+</html>

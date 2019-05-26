@@ -6,6 +6,14 @@ const package = require("../package.json");
 const config = require("../config.json");
 const winston = require("winston");
 const chalk = require("chalk");
+const _mysql = require("mysql2");
+
+const connection = _mysql.createConnection({
+    host: config.mysql.host,
+    user: config.mysql.username,
+    password: config.mysql.password,
+    database: config.mysql.database
+});
 
 const logger = winston.createLogger({
     transports: [
@@ -38,6 +46,12 @@ client.clean = text => {
     else return text;
 }
 
+client.fixEmbed = embed => {
+    embed
+        .setColor("RANDOM")
+        .setAuthor(client.user.username, client.user.displayAvatarURL)
+}
+
 for (const File of Commands) {
     const cmd = require(`./commands/${File}`);
 
@@ -45,7 +59,7 @@ for (const File of Commands) {
 }
 
 
-client.once("ready", () => {
+client.once("ready", async () => {
     logger.info(`${chalk.magenta(client.user.username)} is online`);
     logger.info(`Prefix set to ${chalk.magenta(config.bot.prefix)}`);
     logger.info(`${chalk.magenta(client.commands.array().length)} commands loaded`);
@@ -55,12 +69,15 @@ client.once("ready", () => {
     if(config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
 
     client.user.setActivity("wi7h Axe1");
-    client.defualtEmbed = new Discord.RichEmbed()
-        .setColor("RANDOM")
-        .setAuthor(client.user.username, client.user.displayAvatarURL)
+
+    connection.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, (error) => {
+        if(error) return logger.error(chalk.redBright(error));
+    });
+
+    client.sql = connection;
 });
 
-client.on("message", message => {
+client.on("message", async message => {
     const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(config.bot.prefix)})\\s*`);
     if (!prefixRegex.test(message.content) || message.author.bot) return;
 
@@ -76,7 +93,7 @@ client.on("message", message => {
     if (command.args && !args.length) {
         let reply = `No arguments were provided`;
 
-        if (command.usage) reply += `\nThe proper usage of that function is: \`${config.bot.prefix}${command.name} ${command.usage}\``;
+        if (command.usage) reply += `\nThe proper usage of that command is: \`${config.bot.prefix}${command.name} ${command.usage}\``;
 
         message.channel.send(reply);
     }
@@ -108,12 +125,19 @@ client.on("message", message => {
 
     try {
         message.channel.startTyping();
-        command.execute(message, args, client, logger, Discord);
+        command.execute(message, args, client, logger, Discord, connection);
         message.channel.stopTyping();
+
+        connection.query(`UPDATE analytics SET commands_ran = commands_ran + 1 WHERE bot ="shodan"`, (error) => {
+            if (error) return logger.error(chalk.redBright(error));
+        });
     } catch (error) {
         if(command.preventDefualtError === true) return;
         logger.log("error", chalk.redBright(error));
         message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily");
+        connection.query(`UPDATE analytics SET commands_failed = commands_failed + 1 WHERE bot ="shodan"`, (error) => {
+            if (error) return logger.error(chalk.redBright(error));
+        });
     }
 });
 
@@ -123,4 +147,5 @@ client.on("error", m => logger.error(chalk.redBright(m)));
 
 process.on("uncaughtException", error => logger.error(chalk.redBright(error)));
 
+require("./web/app.js")(client);
 client.login(config.bot.token);

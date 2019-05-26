@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { RichEmbed } = require("discord.js");
 
 module.exports = {
     name: "search",
@@ -19,10 +20,12 @@ module.exports = {
         if(res.data.RelatedTopics[0].Text.length > res.data.Abstract.length) text = url.RelatedTopics[0].Text;
         else text = url.Abstract;
 
-        const embed = client.defualtEmbed
+        const embed = new RichEmbed()
             .setTitle(`Results for: ${res.data.Heading}`)
             .setDescription(text)
             .addField("Links:", res.RelatedTopics[0].FirstURL)
+
+        client.fixEmbed(embed);
 
         return message.channel.send(embed);
     }

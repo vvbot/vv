@@ -19,7 +19,7 @@ module.exports = {
 
         if(ow.data.error) return message.channel.send("That player could not be found.");
 
-        const embed = client.defualtEmbed
+        const embed = new RichEmbed()
             .setTitle(`Profile for ${ow.data.name}`)
             .setThumbnail(ow.data.ratingIcon ? ow.data.ratingIcon : ow.data.icon)
             .addField("Level:", ow.data.level, true)
@@ -30,6 +30,7 @@ module.exports = {
             .addField("Silver Medals Won:",ow.data.quickPlayStats.awards.medalsSilver, true)
             .addField("Gold Medals Won:", ow.data.quickPlayStats.awards.medalsGold, true)
 
+        client.fixEmbed(embed);
         message.channel.send(embed);
     }
 }

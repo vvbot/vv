@@ -7,10 +7,10 @@ module.exports = {
     guildOnly: false,
     execute(message, args, client, logger) {
         const member = client.findMember(message, args[0], true);
-        const embed = client.defualtEmbed
+        const embed = new RichEmbed
             .setTitle(`${member.displayName}'s avatar:`)
-            .setColor("RANDOM")
             .setImage(member.user.displayAvatarURL)
+        client.fixEmbed(embed);
         return message.channel.send(embed);
     }
 }
