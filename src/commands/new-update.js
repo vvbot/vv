@@ -5,8 +5,8 @@ module.exports = {
     usage: "[TITLE] [DESCRIPTION]",
     cooldown: 5,
     adminOnly: true,
-    async execute(message, args, client, logger) {        
-        client.sql.query(`INSERT INTO updates (title, description) VALUES (${args[0]}, ${args[1]})`, (error, rows, fields) => {
+    async execute(message, args, client, logger) {
+        client.sql.query(`INSERT INTO updates (title, description) VALUES (${args[0].replace(/"/g).toString()}, ${args[1].replace(/"/g).toString()})`, (error, rows, fields) => {
             if(error) throw error;
             return message.channel.send("Successfully pushed update.");
         });
