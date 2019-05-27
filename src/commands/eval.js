@@ -1,6 +1,6 @@
 module.exports = {
     name: "eval",
-    description: "Load a file within the commands folder.",
+    description: "Load a file within the commands folder",
     args: false,
     usage: "[CODE]",
     cooldown: 5,

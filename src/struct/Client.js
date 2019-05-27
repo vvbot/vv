@@ -13,6 +13,8 @@ module.exports = class sh0danClient extends Client {
         this.cooldowns = new Collection();
         const Commands = fs.readdirSync(this.commandsFolder).filter(file => file.endsWith(".js"));
 
+        this.giveaways = new Collection();
+
         for (const File of Commands) {
             const cmd = require(`../commands/${File}`);
 
@@ -20,10 +22,16 @@ module.exports = class sh0danClient extends Client {
         }
         
 
-        this.webhook = {}
-        //this.webhook.KSC = new WebhookClient(KSC_WH_ID, KSC_WH_TOKEN, { disableEveryone: true })
-        //this.webhook.PMD = new WebhookClient(PMD_WH_ID, PMD_WH_TOKEN, { disableEveryone: true })
+        this.webhooks = {
+            AGC: new WebhookClient(config.webhooks.AGC.id, config.webhooks.AGC.token)
+        }
 
+        /**
+         * Finds a member from a string, mention, or id
+         * @property {string} msg The message to process
+         * @property {string} suffix The username to search for
+         * @property {bool} self Whether or not to defualt to yourself if no results are returned. Defualts to false.
+         */
         this.findMember = (msg, suffix, self = false) => {
             if (!suffix) {
                 if (self) return msg.member
@@ -34,11 +42,19 @@ module.exports = class sh0danClient extends Client {
             }
         }
 
+        /**
+         * Replaces certain characters and fixes mentions in messages.
+         * @property {string} text The text to clean
+         */
         this.clean = text => {
             if (typeof (text) === "string") return text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
             else return text;
         }
 
+        /**
+         * Fixes an embed by adding the author and colour
+         * @property {RichEmbed} The Embed to fix
+         */
         this.fixEmbed = embed => {
             embed
                 .setColor("RANDOM")

@@ -57,7 +57,6 @@ client.on("message", async message => {
         message.channel.send(reply);
     }
 
-
     if (command.guildOnly && message.channel.type !== "text") return message.channel.send("Please try executing this command inside a Guild.");
     if (command.disabled && !config.bot.admins.includes(message.author.id)) return;
     if (command.adminOnly && !config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunatly ${message.author} you lack the required clearance level for this command. Try contactign a system administrator for further assistance`);

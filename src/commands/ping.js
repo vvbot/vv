@@ -7,6 +7,6 @@ module.exports = {
     cooldown: 5,
     guildOnly: false,
     execute(message, args, client, logger) {
-        message.channel.send(`Pong! Heartbeat: **${client.ping}**`)
+        message.channel.send(`Pong! Heartbeat: **${client.ping.toFixed(2)}**`)
     }
 }

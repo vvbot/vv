@@ -8,9 +8,11 @@ module.exports = {
     cooldown: 5,
     adminOnly: true,
     execute(message, args, client, logger) {
+        let cmd;
         if(client.commands.get(args[0])) return message.channel.send("That command has already been loaded.");
-        const cmd = require(join(client.commandsFolder, `${args[0]}.js`));
-        client.commands.set(cmd.name, cmd)
-        message.channel.send(`Successfully loaded \`${args[0]}\``)
+        if(message.content.endsWith(".js")) cmd = require(join(client.commandsFolder, `${args[0]}`));
+        else cmd = require(join(client.commandsFolder, `${args[0]}.js`));
+        client.commands.set(cmd.name, cmd);
+        message.channel.send(`Successfully loaded \`${args[0]}\``);
     }
 }

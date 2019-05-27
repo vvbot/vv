@@ -84,7 +84,7 @@ module.exports = client => {
     })
 
     app.get("/bot/support", (req, res, next) => {
-        res.redirect("https://discord.gg/2ZR6yKr");
+        res.redirect("https://discord.gg/nCbB3Tm");
     })
 
     app.listen(config.web.port || process.env.port || 8685);
