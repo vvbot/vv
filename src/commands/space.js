@@ -11,6 +11,7 @@ module.exports = {
         const embed = new RichEmbed()
             .setTitle("Space:")
             .setImage(space.data.data)
+            .setFooter("Powered by api.chewey-bot.ga")
         client.fixEmbed(embed);
         return message.channel.send(embed);
     }
