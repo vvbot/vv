@@ -13,6 +13,13 @@ module.exports = client => {
     app.use(bodyParser.text());
 
     app.set("view engine", "hbs");
+    
+    const API = express.Router();
+    API.use(bodyParser.json());
+    API.use(bodyParser.text());
+
+    require("./api/v1")(client.sql, API);
+    app.use(vhost("api.shodanbot.com", API));
 
     app.use("/", express.static(join(__dirname, "views")));
 
@@ -58,12 +65,7 @@ module.exports = client => {
         res.redirect("https://discord.gg/nCbB3Tm");
     })
 
-    const API = express.Router();
-    API.use(bodyParser.json());
-    API.use(bodyParser.text());
-
-    require("./api/v1")(client.sql, API);
-    app.use(vhost("api.shodanbot.com", API));
+    
 
     app.listen(config.web["express-port"] || process.env.port || 8685);
 }
