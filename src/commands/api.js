@@ -3,10 +3,8 @@ const { RichEmbed } = require("discord.js");
 module.exports = {
     name: "api",
     description: "Information about sh0dan's API",
-    args: true,
     usage: "",
     cooldown: 5,
-    adminOnly: true,
     execute(message, args, client, logger) {
         const embed = new RichEmbed()
             .setTitle("sh0dan API")
