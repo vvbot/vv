@@ -8,6 +8,6 @@ module.exports = {
     disabled: true,
     execute(message, args, client, logger) {
         if(args.length > 1) args = args.join(" ");
-        message.channel.send(`${args.split("").reverse().join("")}`);
+        message.channel.send(args.split("").reverse().join(""));
     }
 }

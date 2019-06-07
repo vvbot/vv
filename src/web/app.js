@@ -1,45 +1,16 @@
-module.exports = client => {
-    const express = require("express");
-    const app = express();
-    const { join } = require("path");
-    const config = require("../../config.json");
+const express = require("express");
+const { join } = require("path");
+const config = require("../../config.json");
+const bodyParser = require('body-parser');
+const renderObj = require("../util/RenderObject");
+const vhost = require("vhost");
 
-    const renderObj = {
-        users: null,
-        guilds: null,
-        commands_total: null,
-        commands_run: null,
-        tile_one: {
-            title: null,
-            description: null,
-            version: null
-        },
-        tile_two: {
-            title: null,
-            description: null,
-            version: null
-        },
-        tile_three: {
-            title: null,
-            description: null,
-            version: null
-        },
-        tile_four: {
-            title: null,
-            description: null,
-            version: null
-        },
-        tile_five: {
-            title: null,
-            description: null,
-            version: null
-        },
-        tile_six: {
-            title: null,
-            description: null,
-            version: null
-        }
-    }
+module.exports = client => {
+
+    const app = express();
+
+    app.use(bodyParser.json());
+    app.use(bodyParser.text());
 
     app.set("view engine", "hbs");
 
@@ -87,5 +58,12 @@ module.exports = client => {
         res.redirect("https://discord.gg/nCbB3Tm");
     })
 
-    app.listen(config.web.port || process.env.port || 8685);
+    const API = express.Router();
+    API.use(bodyParser.json());
+    API.use(bodyParser.text());
+
+    require("./api/v1")(client.sql, API);
+    app.use(vhost("api.shodanbot.com", API));
+
+    app.listen(config.web["express-port"] || process.env.port || 8685);
 }

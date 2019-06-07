@@ -30,7 +30,7 @@ client.once("ready", async () => {
 
     client.user.setActivity("wi7h Axe1");
 
-    client.sql.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, (error) => {
+    client.sql.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, error => {
         if(error) return logger.error(chalk.redBright(error));
     });
 
@@ -86,14 +86,14 @@ client.on("message", async message => {
         command.execute(message, args, client, logger, Discord);
         message.channel.stopTyping();
 
-        client.sql.query(`UPDATE analytics SET commands_ran = commands_ran + 1 WHERE bot ="shodan"`, (error) => {
+        client.sql.query(`UPDATE analytics SET commands_ran = commands_ran + 1 WHERE bot ="shodan"`, error => {
             if (error) return logger.error(chalk.redBright(error));
         });
     } catch (error) {
         if(command.preventDefualtError === true) return;
         logger.log("error", chalk.redBright(error));
         message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily");
-        client.sql.query(`UPDATE analytics SET commands_failed = commands_failed + 1 WHERE bot ="shodan"`, (error) => {
+        client.sql.query(`UPDATE analytics SET commands_failed = commands_failed + 1 WHERE bot ="shodan"`, error => {
             if (error) return logger.error(chalk.redBright(error));
         });
     }
@@ -103,7 +103,7 @@ client.on("debug", m => logger.debug( chalk.gray(m)));
 client.on("warn", m => logger.warn(chalk.yellowBright(m)));
 client.on("error", m => logger.error(chalk.redBright(m)));
 
-process.on("uncaughtException", error => logger.error(chalk.redBright(error)));
+//process.on("uncaughtException", error => logger.error(chalk.redBright(error)));
 
 require("./web/app.js")(client);
 client.login(config.bot.token);
