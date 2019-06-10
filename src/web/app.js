@@ -18,8 +18,8 @@ module.exports = client => {
     API.use(bodyParser.text());
 
     require("./api/v1")(client.sql, API);
-    //app.use(vhost("api.shodanbot.com", API));
-    app.use("/api", API);
+    app.use(vhost("api.shodanbot.com", API));
+    //app.use("/api", API);
 
     app.use("/", express.static(join(__dirname, "views")));
 
