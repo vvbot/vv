@@ -2,31 +2,29 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const sh0danClient = require("./struct/Client");
 const package = require("../package.json");
-const config = require("../config.json");
 const winston = require("winston");
 const chalk = require("chalk");
-
-
-const logger = winston.createLogger({
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: config.bot.log_file_name || "log.txt" })
-    ],
-    format: winston.format.printf(log => `[${log.level.toUpperCase()}] - ${log.message}`)
-})
 
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const client = new sh0danClient();
 
+const logger = winston.createLogger({
+    transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: client.config.bot.log_file_name || "log.txt" })
+    ],
+    format: winston.format.printf(log => `[${log.level.toUpperCase()}] - ${log.message}`)
+});
+
 client.once("ready", async () => {
     logger.info(`${chalk.magenta(client.user.username)} is online`);
-    logger.info(`Prefix set to ${chalk.magenta(config.bot.prefix)}`);
+    logger.info(`Prefix set to ${chalk.magenta(client.prefix)}`);
     logger.info(`${chalk.magenta(client.commands.array().length)} commands loaded`);
     logger.info(`Program Version: ${chalk.blue("v" + package.version)}`);
     logger.info(`Node Version: ${chalk.blue(process.version)}`);
     logger.info(`Discord.js Version ${chalk.blue(package.dependencies["discord.js"].replace("^", "v"))}`)   
-    if(config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
+    if(client.config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
 
     client.user.setActivity("wi7h Axe1");
 
@@ -37,12 +35,12 @@ client.once("ready", async () => {
 });
 
 client.on("message", async message => {
-    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(config.bot.prefix)})\\s*`);
+    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefix)})\\s*`);
     if (!prefixRegex.test(message.content) || message.author.bot) return;
 
     const [, prefix] = message.content.match(prefixRegex);
     const args = message.content.slice(prefix.length).trim().split(/ +/);
-    if(config.bot.debug_mode === true) logger.info(`Command run: ${chalk.green(args[0])}`);
+    if(client.config.bot.debug_mode === true) logger.info(`Command run: ${chalk.green(args[0])}`);
     const commandName = args.shift().toLowerCase();
     
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -52,14 +50,14 @@ client.on("message", async message => {
     if (command.args && !args.length) {
         let reply = `No arguments were provided`;
 
-        if (command.usage) reply += `\nThe proper usage of that command is: \`${config.bot.prefix}${command.name} ${command.usage}\``;
+        if (command.usage) reply += `\nThe proper usage of that command is: \`${client.prefix}${command.name} ${command.usage}\``;
 
         message.channel.send(reply);
     }
 
     if (command.guildOnly && message.channel.type !== "text") return message.channel.send("Please try executing this command inside a Guild.");
-    if (command.disabled && !config.bot.admins.includes(message.author.id)) return;
-    if (command.adminOnly && !config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunatly ${message.author} you lack the required clearance level for this command. Try contactign a system administrator for further assistance`);
+    if (command.disabled && !client.config.bot.admins.includes(message.author.id)) return;
+    if (command.adminOnly && !client.config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunatly ${message.author} you lack the required clearance level for this command. Try contactign a system administrator for further assistance`);
     
     if (!client.cooldowns.has(command.name)) {
         client.cooldowns.set(command.name, new Discord.Collection());
@@ -78,7 +76,7 @@ client.on("message", async message => {
         }
     }
 
-    if(!config.bot.admins.includes(message.author.id)) timestamps.set(message.author.id, now);
+    if (!client.config.bot.admins.includes(message.author.id)) timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownTime);
 
     try {
@@ -106,4 +104,4 @@ client.on("error", m => logger.error(chalk.redBright(m)));
 //process.on("uncaughtException", error => logger.error(chalk.redBright(error)));
 
 require("./web/app.js")(client);
-client.login(config.bot.token);
+client.login(client.config.bot.token);

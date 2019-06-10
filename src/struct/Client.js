@@ -3,6 +3,7 @@ const _mysql = require("mysql");
 const config = require("../../config.json");
 const { join } = require("path");
 const fs = require("fs");
+const beautify = require("js-beautify").js;
 
 module.exports = class sh0danClient extends Client {
     constructor(options) {
@@ -12,6 +13,9 @@ module.exports = class sh0danClient extends Client {
         this.commands = new Collection();
         this.cooldowns = new Collection();
         const Commands = fs.readdirSync(this.commandsFolder).filter(file => file.endsWith(".js"));
+        
+        this.prefix = config.bot.prefix;
+        this.config = config;
 
         this.giveaways = new Collection();
 
@@ -20,8 +24,7 @@ module.exports = class sh0danClient extends Client {
 
             this.commands.set(cmd.name, cmd);
         }
-        
-
+    
         this.webhooks = {
             AGC: new WebhookClient(config.webhooks.AGC.id, config.webhooks.AGC.token)
         }
@@ -47,8 +50,12 @@ module.exports = class sh0danClient extends Client {
          * @property {string} text The text to clean
          */
         this.clean = text => {
-            if (typeof (text) === "string") return text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-            else return text;
+            let cleanRegex = new RegExp(`'(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.AGC.token}|${this.config.mysql.host}|${this.config.mysql.password}|${this.config.mysql.username})'`, "g");
+            
+            if (text.match(cleanRegex)) return text = text.replace(cleanRegex, "[redacted]");
+            if (typeof (text) === "string") return text = text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+            
+            return beautify(text, { indent_size: 4, space_in_empty_paren: true });
         }
 
         /**

@@ -1,4 +1,3 @@
-const { prefix } = require("../../config.json").bot;
 const { RichEmbed } = require("discord.js");
 
 module.exports = {
@@ -22,7 +21,7 @@ module.exports = {
                 if (command.hidden|| command.disabled || command.adminOnly) return false;
                 return true
             }).map(command => `**${command.name}** :: ${command.description}`).join("\n"));
-            body.push(`\nYou can utilise **${prefix}help [COMMAND NAME]** or **${client.user}help [COMMAND NAME]** for further information`);
+            body.push(`\nYou can utilise **${client.prefix}help [COMMAND NAME]** or **${client.user}help [COMMAND NAME]** for further information`);
 
             return message.author.send(body, { split: true}).then(() => {
                 if (message.channel.type === "dm") return;

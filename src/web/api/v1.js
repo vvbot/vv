@@ -6,33 +6,36 @@ module.exports = (sql, API) => {
 
     API.get("/", (req, res) => {
         return res.send(stripIndent`
-        sh0dan API v${this.version}
-        Base URL: ${this.baseURL}
-
-        Endpoints will be specified like this:
-            TYPE :: ENDPOINT
-        Example:
-            POST :: /fun/clap
-        
-        URL Parameters will be shown with a colon (:). Example:
-            GET :: /posts/:ID
-        
-        URL Queries will be shown with a selector like this:
-            GET :: /tools/snowflake?snowflake=SNOWFLAKE
-            
-        ---------------
-
-        Endpoints:
-            Post Related:
-                GET :: /posts/latest  -  Returns the latest sh0dan update
-                GET :: /posts/:ID  -  Returns the update with the specified ID
-                GET :: /posts  -  Returns all sh0dan updates
-            Fun:
-                POST :: /fun/clap  -  Replaces the spaces in the request body with claps 👏
-                POST :: /fun/reverse  -  Reverses the request body
-            Tools:
-                GET :: /tools/snowflake?snowflake=SNOWFLAKE  -  Converts the given snowflake to a readable date
-                POST :: /tools/snowflake  -  Converts the snowflake given in teh request body to a readable date
+        sh0dan API v${this.version}<br>
+        Base URL: ${this.baseURL}<br>
+        <br>
+        Endpoints will be specified like this:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;TYPE :: ENDPOINT<br>
+        Example:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;POST :: /fun/clap<br>
+        <br>
+        URL Parameters will be shown with a colon (:). Example:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;GET :: /posts/:ID
+        <br>
+        URL Queries will be shown with a selector like this:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;GET :: /tools/snowflake?snowflake=SNOWFLAKE<br>
+        <br>
+        ---------------<br>
+        <br>
+        Endpoints:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Post Related:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /posts/latest  -  Returns the latest sh0dan update<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /posts/:ID  -  Returns the update with the specified ID<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /posts  -  Returns all sh0dan updates<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Fun:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POST :: /fun/clap  -  Replaces the spaces in the request body with claps 👏<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POST :: /fun/reverse  -  Reverses the request body<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Tools:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /tools/snowflake?snowflake=SNOWFLAKE  -  Converts the given snowflake to a readable date<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POST :: /tools/snowflake  -  Converts the snowflake given in teh request body to a readable date<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Tags:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /tags  -  Gets all tags in the database<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /tags/:NAME  -  Gets the tag with the given name. NAME must be URI encoded!
         `)
     })
     API.get("/v1/posts/latest", (req, res) => {
@@ -54,7 +57,7 @@ module.exports = (sql, API) => {
         sql.query(`SELECT * FROM updates ORDER BY ID ${req.query.descending === "true" ? "DESC" : ""} ${req.query.limit ? "LIMIT " + req.query.limit : ""}`, (error, rows, fields) => {
             if (!rows) return res.json({
                 "error": "Nothing found"
-            })
+            });
             else return res.json(rows);
         });
     });
@@ -83,5 +86,22 @@ module.exports = (sql, API) => {
         });
     });
 
-    
+    API.get("/v1/tags", (req, res) => {
+        sql.query(`SELECT * FROM tags`, (error, rows, fields)=> {
+            if(!rows) return res.json({
+                "error": "Nothing found"
+            });
+            else return res.json(rows);
+        });
+    });
+
+    API.get("/v1/tags/:name", (req, res) => {
+        console.log(decodeURIComponent(req.params.name.replace(/\+/g, "%20")).toUpperCase())
+        sql.query(`SELECT * FROM tags WHERE tagName="${decodeURIComponent(req.params.name.replace(/\+/g, "%20")).toUpperCase()}"`, (error, rows, fields) => {
+            if (!rows) return res.json({
+                "error": "Nothing found"
+            });
+            else return res.json(rows[0]);
+        });
+    });
 }
