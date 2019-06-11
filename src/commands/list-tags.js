@@ -15,6 +15,7 @@ module.exports = {
             const embed = new RichEmbed()
                 .setTitle("Latest User Tags:")
                 .setDescription(rows.join("\r\n"))
+            client.fixEmbed(embed);
             message.channel.send(embed);
             rowsEnd = [];
         });
