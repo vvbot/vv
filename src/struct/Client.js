@@ -29,45 +29,6 @@ module.exports = class sh0danClient extends Client {
             AGC: new WebhookClient(config.webhooks.AGC.id, config.webhooks.AGC.token)
         }
 
-        /**
-         * Finds a member from a string, mention, or id
-         * @property {string} msg The message to process
-         * @property {string} suffix The username to search for
-         * @property {bool} self Whether or not to defualt to yourself if no results are returned. Defualts to false.
-         */
-        this.findMember = (msg, suffix, self = false) => {
-            if (!suffix) {
-                if (self) return msg.member
-                else return null
-            } else {
-                let member = msg.mentions.members.first() || msg.guild.members.get(suffix) || msg.guild.members.find(m => m.displayName.toLowerCase().includes(suffix.toLowerCase()) || m.user.username.toLowerCase().includes(suffix.toLowerCase()));
-                return member
-            }
-        }
-
-        /**
-         * Replaces certain characters and fixes mentions in messages.
-         * @property {string} text The text to clean
-         */
-        this.clean = text => {
-            let cleanRegex = new RegExp(`'(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.AGC.token}|${this.config.mysql.host}|${this.config.mysql.password}|${this.config.mysql.username})'`, "g");
-            
-            if (text.match(cleanRegex)) return text = text.replace(cleanRegex, "[redacted]");
-            if (typeof (text) === "string") return text = text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-            
-            return beautify(text, { indent_size: 4, space_in_empty_paren: true });
-        }
-
-        /**
-         * Fixes an embed by adding the author and colour
-         * @property {RichEmbed} The Embed to fix
-         */
-        this.fixEmbed = embed => {
-            embed
-                .setColor("RANDOM")
-                .setAuthor(this.user.username, this.user.displayAvatarURL)
-        }
-
         const connection = _mysql.createConnection({
             host: config.mysql.host,
             user: config.mysql.username,
@@ -76,5 +37,47 @@ module.exports = class sh0danClient extends Client {
         });
         
         this.sql = connection;
+    }
+
+    /**
+     * Finds a member from a string, mention, or id
+     * @property {string} msg The message to process
+     * @property {string} suffix The username to search for
+     * @property {bool} self Whether or not to defualt to yourself if no results are returned. Defualts to false.
+     */
+    findMember (msg, suffix, self = false) {
+        if (!suffix) {
+            if (self) return msg.member;
+            else return null;
+        } else {
+            let member = msg.mentions.members.first() || msg.guild.members.get(suffix) || msg.guild.members.find(m => m.displayName.toLowerCase().includes(suffix.toLowerCase()) || m.user.username.toLowerCase().includes(suffix.toLowerCase()));
+            return member;
+        }
+    }
+
+    /**
+     * Fixes an embed by adding the author and colour
+     * @property {RichEmbed} The Embed to fix
+     */
+    fixEmbed (embed) {
+        embed
+            .setColor("RANDOM")
+            .setAuthor(this.user.username, this.user.displayAvatarURL)
+    }
+
+    /**
+     * Replaces certain characters and fixes mentions in messages.
+     * @property {string} text The text to clean
+     */
+    clean (text) {
+        let cleanRegex = new RegExp(`'(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.AGC.token}|${this.config.mysql.host}|${this.config.mysql.password}|${this.config.mysql.username})'`, "g");
+
+        if (text.match(cleanRegex)) return text = text.replace(cleanRegex, "[redacted]");
+        if (typeof (text) === "string") return text = text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+
+        return beautify(text, {
+            indent_size: 4,
+            space_in_empty_paren: true
+        });
     }
 }

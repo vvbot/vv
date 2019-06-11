@@ -32,7 +32,7 @@ module.exports = (sql, API) => {
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POST :: /fun/reverse  -  Reverses the request body<br>
         &nbsp;&nbsp;&nbsp;&nbsp;Tools:<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /tools/snowflake?snowflake=SNOWFLAKE  -  Converts the given snowflake to a readable date<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POST :: /tools/snowflake  -  Converts the snowflake given in teh request body to a readable date<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;POST :: /tools/snowflake  -  Converts the snowflake given in the request body to a readable date<br>
         &nbsp;&nbsp;&nbsp;&nbsp;Tags:<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /tags  -  Gets all tags in the database<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GET :: /tags/:NAME  -  Gets the tag with the given name. NAME must be URI encoded!

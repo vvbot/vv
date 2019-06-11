@@ -1,6 +1,6 @@
 {
     "bot": {
-        "token": "Bot Token",
+        "token": "token",
         "admins": [
             "228872946557386752"
         ],
@@ -9,6 +9,19 @@
         "log_file_name": "log.txt"
     },
     "web": {
-        "chewey-bot": "Chewey Bot API Token"
+        "chewey-bot": "chewey-bot api token",
+        "express-port": "8089"
+    },
+    "mysql": {
+        "host": "mysql-host",
+        "password": "mysql-password",
+        "database": "mysql-database",
+        "username": "mysql-username"
+    },
+    "webhooks": {
+        "AGC": {
+            "id": "webhook-id",
+            "token": "webhook-token"
+        }
     }
 }

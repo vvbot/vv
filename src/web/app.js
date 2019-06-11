@@ -65,7 +65,5 @@ module.exports = client => {
         res.redirect("https://discord.gg/nCbB3Tm");
     })
 
-    
-
     app.listen(client.config.web["express-port"] || process.env.port || 8685);
 }
