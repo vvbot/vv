@@ -26,7 +26,8 @@ client.once("ready", async () => {
     logger.info(`Discord.js Version ${chalk.blue(package.dependencies["discord.js"].replace("^", "v"))}`)   
     if(client.config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
 
-    client.user.setActivity("wi7h Axe1");
+    client.user.setActivity(client.presence.activities[0].title, { url: "https://shodanbot.com", type: client.presence.activities[0].type });
+    setInterval(() => client.user.setActivity(client.presence.random().title, { url: "https://shodanbot.com", type: client.presence.random().type }), 300000);
 
     client.sql.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, error => {
         if(error) return logger.error(chalk.redBright(error));

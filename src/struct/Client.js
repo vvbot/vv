@@ -37,6 +37,24 @@ module.exports = class sh0danClient extends Client {
         });
         
         this.sql = connection;
+
+        this.presence = {
+            activities: [
+                { type: "PLAYING", title: "wi7h Axe1" },
+                { type: "PLAYING", title: "with my API" },
+                { type: "PLAYING", title: "ded" },
+                { type: "PLAYING", title: "with Sakira" },
+                { type: "WATCHING", title: "YmlyZSBQbmZmdnFs" },
+                { type: "PLAYING", title: "with the Cortex Reavers" },
+                { type: "PLAYING", title: "with the ship" },
+                { type: "WATCHING", title: "shodanbot.com" },
+                { type: "WATCHING", title: "api.shodanbot.com" },
+                { type: "STREAMING", title: "my s0urce" }
+            ],
+            random: () => {
+                return this.presence.activities[~~(this.presence.activities.length * Math.random())];
+            }
+        };
     }
 
     /**
