@@ -52,7 +52,7 @@ module.exports = class sh0danClient extends Client {
                 { type: "STREAMING", title: "my s0urce" }
             ],
             random: () => {
-                return this.presence.activities[~~(this.presence.activities.length * Math.random())];
+                return this.randomItem(this.presence.activities);
             }
         };
     }
@@ -74,7 +74,7 @@ module.exports = class sh0danClient extends Client {
     }
 
     /**
-     * Fixes an embed by adding the author and colour
+     * Fixes an embed by adding the author and colour.
      * @property {RichEmbed} The Embed to fix
      */
     fixEmbed (embed) {
@@ -97,5 +97,13 @@ module.exports = class sh0danClient extends Client {
             indent_size: 4,
             space_in_empty_paren: true
         });
+    }
+
+    /**
+     * Selects and returns a random item from the given array.
+     * @property {array} array The array to select the random item from
+     */
+    randomItem (array) {
+        return array[~~(array.length * Math.random())]
     }
 }
