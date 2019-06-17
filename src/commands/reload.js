@@ -5,6 +5,7 @@ module.exports = {
     description: "Reload a command within the bot process",
     args: true,
     usage: "",
+    aliases: ["rl"],
     cooldown: 5,
     adminOnly: true,
     execute(message, args, client, logger) {
