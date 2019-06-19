@@ -23,7 +23,8 @@ client.once("ready", async () => {
     logger.info(`${chalk.magenta(client.commands.array().length)} commands loaded`);
     logger.info(`Program Version: ${chalk.blue("v" + package.version)}`);
     logger.info(`Node Version: ${chalk.blue(process.version)}`);
-    logger.info(`Discord.js Version ${chalk.blue(package.dependencies["discord.js"].replace("^", "v"))}`)   
+    logger.info(`Discord.js Version ${chalk.blue(package.dependencies["discord.js"].replace("^", "v"))}`)   ;
+    
     if(client.config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
 
     client.user.setActivity(client.presence.activities[0].title, { url: "https://shodanbot.com", type: client.presence.activities[0].type });

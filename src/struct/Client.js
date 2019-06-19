@@ -50,7 +50,7 @@ module.exports = class sh0danClient extends Client {
                 { type: "WATCHING", title: "shodanbot.com" },
                 { type: "WATCHING", title: "api.shodanbot.com" },
                 { type: "STREAMING", title: "my s0urce" },
-                { type: "LISTENING", title: "to songs about Git"}
+                { type: "LISTENING", title: "songs about Git"}
             ],
             random: () => {
                 return this.randomItem(this.presence.activities);
