@@ -1,23 +1,23 @@
-const { Client, WebhookClient, Collection } = require("discord.js");
+const Discord = require("discord.js");
 const _mysql = require("mysql");
 const config = require("../../config.json");
 const { join } = require("path");
 const fs = require("fs");
 const beautify = require("js-beautify").js;
 
-module.exports = class sh0danClient extends Client {
+module.exports = class sh0danClient extends Discord.Client {
     constructor(options) {
         super(options);
         
         this.commandsFolder = join(__dirname, "..", "commands");
-        this.commands = new Collection();
-        this.cooldowns = new Collection();
+        this.commands = new Discord.Collection();
+        this.cooldowns = new Discord.Collection();
         const Commands = fs.readdirSync(this.commandsFolder).filter(file => file.endsWith(".js"));
         
         this.prefix = config.bot.prefix;
         this.config = config;
 
-        this.giveaways = new Collection();
+        this.giveaways = new Discord.Collection();
 
         for (const File of Commands) {
             const cmd = require(`../commands/${File}`);
@@ -26,7 +26,7 @@ module.exports = class sh0danClient extends Client {
         }
     
         this.webhooks = {
-            AGC: new WebhookClient(config.webhooks.AGC.id, config.webhooks.AGC.token)
+            AGC: new Discord.WebhookClient(config.webhooks.AGC.id, config.webhooks.AGC.token)
         }
 
         const connection = _mysql.createConnection({
@@ -54,8 +54,35 @@ module.exports = class sh0danClient extends Client {
             ],
             random: () => {
                 return this.randomItem(this.presence.activities);
+            },
+            next: async (iteration = 1) => {
+                let current = { type: this.presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
+                let nextIndex = this.presence.activities.map(act => act.title).indexOf(current.title) + iteration;
+                await this.user.setActivity(this.presence.activities[nextIndex].title, { url: "https://shodanbot.com", type: this.presence.activities[nextIndex].type });
+            },
+            fix: async () => {
+                let current = { type: this.presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
+                let index = this.presence.activities.map(act => act.title).indexOf(current.title);
+                if(this.user.presence.game.type !== this.presence.activities[index].type) await this.user.setActivity(this.presence.activities[index].title, { url: "https://shodanbot.com", type: this.presence.activities[index].type });
             }
         };
+
+        this.emojiUtils = {
+            emojis: {
+                "nanites": "<:Nanites:592464037279826095>"
+            }
+        };
+
+        this.economy = {
+            itemCosts: {
+                "brawnBoost": 2500,
+                "psiBoost": 5000,
+                "hardReset": 10000
+            },
+            defaultColour: "36393F"
+        };
+
+        
     }
 
     /**
@@ -102,7 +129,7 @@ module.exports = class sh0danClient extends Client {
 
     /**
      * Selects and returns a random item from the given array.
-     * @property {array} array The array to select the random item from
+     * @property {Array} array The array to select the random item from
      */
     randomItem (array) {
         return array[~~(array.length * Math.random())]

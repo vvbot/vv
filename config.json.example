@@ -2,10 +2,11 @@
     "bot": {
         "token": "token",
         "admins": [
-            "228872946557386752"
+            "228872946557386752",
+            "365955998122508300"
         ],
         "prefix": "s$",
-        "debug_mode": true,
+        "debug_mode": false,
         "log_file_name": "log.txt"
     },
     "web": {

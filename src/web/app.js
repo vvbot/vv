@@ -27,7 +27,7 @@ module.exports = client => {
         client.sql.query(`SELECT commands_ran FROM analytics WHERE bot ="shodan"`, (error, rows, fields) => {
             let size = rows[0].commands_ran;
             if (error) size = "ERROR";
-            renderObj.commands_run = size
+            renderObj.commands_run = size;
         });
         client.sql.query(`SELECT * from updates ORDER BY id DESC LIMIT 6`, (error, rows, fields) => {
             renderObj.tile_one.title = rows[0].title;
@@ -47,7 +47,7 @@ module.exports = client => {
             renderObj.tile_five.version = rows[4].id
             renderObj.tile_six.title = rows[5].title;
             renderObj.tile_six.description = rows[5].description;
-            renderObj.tile_six.version = rows[5].id
+            renderObj.tile_six.version = rows[5].id;
         });
 
         renderObj.users = client.users.size;
@@ -65,5 +65,5 @@ module.exports = client => {
         res.redirect("https://discord.gg/nCbB3Tm");
     })
 
-    app.listen(client.config.web["express-port"] || process.env.port || 8685);
+    app.listen(client.config.web["webapp-port"] || process.env.port || 8685);
 }

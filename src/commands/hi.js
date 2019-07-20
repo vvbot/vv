@@ -7,6 +7,6 @@ module.exports = {
     cooldown: 5,
     hidden: true,
     execute(message, args, client, logger) {
-        message.channel.send(`hewwowasd`)
+        return message.channel.send(`hewwo OwO`)
     }
 }

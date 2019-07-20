@@ -4,6 +4,7 @@ const sh0danClient = require("./struct/Client");
 const package = require("../package.json");
 const winston = require("winston");
 const chalk = require("chalk");
+const moment = require("moment");
 
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -28,7 +29,10 @@ client.once("ready", async () => {
     if(client.config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
 
     client.user.setActivity(client.presence.activities[0].title, { url: "https://shodanbot.com", type: client.presence.activities[0].type });
-    setInterval(() => client.user.setActivity(client.presence.random().title, { url: "https://shodanbot.com", type: client.presence.random().type }), 300000);
+    setInterval(() => {
+        let activity = client.presence.random();
+        client.user.setActivity(activity.title, { url: "https://shodanbot.com", type: activity.type });
+    }, 300000);
 
     client.sql.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, error => {
         if(error) return logger.error(chalk.redBright(error));
@@ -42,6 +46,7 @@ client.on("message", async message => {
 
     const [, prefix] = message.content.match(prefixRegex);
     const args = message.content.slice(prefix.length).trim().split(/ +/);
+    if(args.length === 0 || args[0] === "") return;
     if(client.config.bot.debug_mode === true) logger.info(`Command run: ${chalk.green(args[0])}`);
     const commandName = args.shift().toLowerCase();
     
@@ -74,7 +79,7 @@ client.on("message", async message => {
 
         if (now < expiration) {
             const timeLeft = (expiration - now) / 1000;
-            return message.reply(`${message.channel.type === "dm" ? "T" : ", t"}hat command (**${command.name}**) is unusable for another ${timeLeft.toFixed(1)} seconds. Please be patient.`);
+            return message.reply(`${message.channel.type === "dm" ? "T" : ", t"}hat command (**${command.name}**) is unusable for another ${moment("2015-01-01").startOf('day').seconds(timeLeft).format('H:mm:ss')}. Please be patient.`);
         }
     }
 
@@ -82,9 +87,9 @@ client.on("message", async message => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownTime);
 
     try {
-        message.channel.startTyping();
-        command.execute(message, args, client, logger, Discord);
-        message.channel.stopTyping();
+        await message.channel.startTyping();
+        await command.execute(message, args, client, logger, Discord);
+        await message.channel.stopTyping();
 
         client.sql.query(`UPDATE analytics SET commands_ran = commands_ran + 1 WHERE bot ="shodan"`, error => {
             if (error) return logger.error(chalk.redBright(error));
@@ -93,7 +98,8 @@ client.on("message", async message => {
         if(command.preventDefualtError === true) return;
         logger.log("error", chalk.redBright(error));
         message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily");
-        client.sql.query(`UPDATE analytics SET commands_failed = commands_failed + 1 WHERE bot ="shodan"`, error => {
+        await message.channel.stopTyping();
+        client.sql.query(`UPDATE analytics SET commands_failed = commands_failed + 1 WHERE bot = "shodan"`, error => {
             if (error) return logger.error(chalk.redBright(error));
         });
     }
