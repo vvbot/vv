@@ -1,5 +1,5 @@
 {
-  "name": "shodan",
+  "name": "sh0dan",
   "version": "1.1.0",
   "description": "A complete rewrite of my first Discord Bot and overall code project",
   "main": "src/bot.js",
