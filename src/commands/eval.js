@@ -13,7 +13,7 @@ module.exports = {
 
             if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
             
-            return message.channel.send(client.clean(evaled), { code: "xl", split: true });
+            return message.channel.send(client.clean(evaled), { code: "js", split: true });
         } catch(err) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);
         }
