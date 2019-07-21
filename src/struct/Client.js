@@ -67,7 +67,7 @@ module.exports = class sh0danClient extends Discord.Client {
             },
             next: async (iteration = 1) => {
                 let current = { type: this.presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
-                let nextIndex = iteration > this.presence.activities.length ? this.presence.activities.length - 1: this.presence.activities.map(act => act.title).indexOf(current.title) + iteration;
+                let nextIndex = (iteration > this.presence.activities.length) ? this.presence.activities.length - 1: this.presence.activities.map(act => act.title).indexOf(current.title) + iteration;
                 await this.user.setActivity(`${this.presence.activities[nextIndex].title} | ${config.bot.prefix}help`, { url: "https://shodanbot.com", type: this.presence.activities[nextIndex].type });
             },
             fix: async () => {
