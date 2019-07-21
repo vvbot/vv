@@ -31,10 +31,10 @@ client.once("ready", async () => {
     
     if(client.config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
 
-    client.user.setActivity(client.presence.activities[0].title, { url: "https://shodanbot.com", type: client.presence.activities[0].type });
+    client.user.setActivity(`${client.presence.activities[0].title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: client.presence.activities[0].type });
     setInterval(() => {
         let activity = client.presence.random();
-        client.user.setActivity(activity.title, { url: "https://shodanbot.com", type: activity.type });
+        client.user.setActivity(`${activity.title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: activity.type });
     }, 300000);
 
     client.sql.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, error => {
