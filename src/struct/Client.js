@@ -134,4 +134,33 @@ module.exports = class sh0danClient extends Discord.Client {
     randomItem (array) {
         return array[~~(array.length * Math.random())]
     }
+
+    /**
+     * Humanizes the bot's uptime
+     */
+    uptime() {
+        var msec = process.uptime().toFixed(0) * 1000;
+        var days = Math.floor(msec / 1000 / 60 / 60 / 24);
+        msec -= days * 1000 * 60 * 60 * 24;
+        var hours = Math.floor(msec / 1000 / 60 / 60);
+        msec -= hours * 1000 * 60 * 60;
+        var mins = Math.floor(msec / 1000 / 60);
+        msec -= mins * 1000 * 60;
+        var secs = Math.floor(msec / 1000);
+        var timestr = "";
+        if (days > 0) {
+            timestr += days + "d ";
+        }
+        if (hours > 0) {
+            timestr += hours + "h ";
+        }
+        if (mins > 0) {
+            timestr += mins + "m ";
+        }
+        if (secs > 0) {
+            timestr += secs + "s";
+        }
+        return timestr
+    }
+
 }

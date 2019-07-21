@@ -4,7 +4,6 @@ module.exports = {
     name: "reload",
     description: "Reload a command within the bot process",
     args: true,
-    usage: "",
     aliases: ["rl"],
     cooldown: 5,
     adminOnly: true,
@@ -14,6 +13,6 @@ module.exports = {
         client.commands.delete(args[0]);
         const cmd = require(join(client.commandsFolder, `${args[0]}.js`));
         client.commands.set(cmd.name, cmd);
-        message.channel.send(`Successfully reloaded \`${args[0]}\``);
+        message.channel.send(`Successfully reloaded \`${args[0]}\`.`);
     }
 }

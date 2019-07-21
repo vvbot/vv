@@ -10,6 +10,9 @@ const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const client = new sh0danClient();
 
+const anal = require("discord-bot-analytics");
+new anal(client.config.web["chewey-bot"], client);
+
 const logger = winston.createLogger({
     transports: [
         new winston.transports.Console(),
@@ -41,7 +44,7 @@ client.once("ready", async () => {
 });
 
 client.on("message", async message => {
-    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefix)})\\s*`);
+    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefix)}|${escapeRegex(client.prefix.toUpperCase())})\\s*`);
     if (!prefixRegex.test(message.content) || message.author.bot) return;
 
     const [, prefix] = message.content.match(prefixRegex);
@@ -79,7 +82,7 @@ client.on("message", async message => {
 
         if (now < expiration) {
             const timeLeft = (expiration - now) / 1000;
-            return message.reply(`${message.channel.type === "dm" ? "T" : ", t"}hat command (**${command.name}**) is unusable for another ${moment("2015-01-01").startOf('day').seconds(timeLeft).format('H:mm:ss')}. Please be patient.`);
+            return message.reply(`${message.channel.type === "dm" ? "T" : ", t"}hat command (**${command.name}**) is unusable for another ${moment("2015-01-01").startOf("day").seconds(timeLeft).format("h m s")}. Please be patient.`);
         }
     }
 
