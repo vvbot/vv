@@ -50,21 +50,31 @@ module.exports = class sh0danClient extends Discord.Client {
                 { type: "WATCHING", title: "shodanbot.com" },
                 { type: "WATCHING", title: "api.shodanbot.com" },
                 { type: "STREAMING", title: "my s0urce" },
-                { type: "LISTENING", title: "songs about Git"}
+                { type: "LISTENING", title: "songs about Git"},
+                { type: "LISTENING", title: "Technologic by Daft Punk" },
+                { type: "WATCHING", title: "over the Von Braun" },
+                { type: "WATCHING", tite: "Citadel Station" },
+                { type: "PLAYING", title: "with the End" },
+                { type: "PLAYING", title: "with The Many" },
+                { type: "PLAYING", title: "with the D-Zone" },
+                { type: "PLAYING", title: "with Sakira" },
+                { type: "WATCHING", title: "endless space go by" },
+                { type: "STREAMING", title: "data through a pipe" },
+                { type: "PLAYING", title: "Cards Against Humanity" }
             ],
             random: () => {
                 return this.randomItem(this.presence.activities);
             },
             next: async (iteration = 1) => {
                 let current = { type: this.presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
-                let nextIndex = this.presence.activities.map(act => act.title).indexOf(current.title) + iteration;
+                let nextIndex = iteration > this.presence.activities.length ? this.presence.activities.length - 1: this.presence.activities.map(act => act.title).indexOf(current.title) + iteration;
                 await this.user.setActivity(this.presence.activities[nextIndex].title, { url: "https://shodanbot.com", type: this.presence.activities[nextIndex].type });
             },
             fix: async () => {
                 let current = { type: this.presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
                 let index = this.presence.activities.map(act => act.title).indexOf(current.title);
                 if(this.user.presence.game.type !== this.presence.activities[index].type) await this.user.setActivity(this.presence.activities[index].title, { url: "https://shodanbot.com", type: this.presence.activities[index].type });
-            }
+            },
         };
 
         this.emojiUtils = {
