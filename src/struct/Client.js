@@ -126,9 +126,9 @@ module.exports = class sh0danClient extends Discord.Client {
      * @property {string} text The text to clean
      */
     clean (text) {
-        let cleanRegex = new RegExp(`(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.AGC.token}|${this.config.mysql.host}|${this.config.mysql.password}|${this.config.mysql.username}|${this.config.web["ping-api"]})`, "g");
+        let cleanRegex = new RegExp(`(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.AGC.token}|${this.config.mysql.host}|${this.config.mysql.password}|${this.config.mysql.username}|${decodeURIComponent(this.config.web["ping-api"]}))`, "g");
 
-        if (text.indexOf(this.config.bot.token) !== -1 || text.indexOf(this.config.web["chewey-bot"]) !== -1 || text.indexOf(this.config.webhooks.AGC.token) !== -1 || text.indexOf(this.config.mysql.host) !== -1 || text.indexOf(this.config.mysql.username) !== -1 || text.indexOf(this.config.web["ping-api"]) !== -1) text = text.replace(cleanRegex, "[redacted]");
+        if (text.indexOf(this.config.bot.token) !== -1 || text.indexOf(this.config.web["chewey-bot"]) !== -1 || text.indexOf(this.config.webhooks.AGC.token) !== -1 || text.indexOf(this.config.mysql.host) !== -1 || text.indexOf(this.config.mysql.username) !== -1 || text.indexOf(decodeURIComponent(this.config.web["ping-api"])) !== -1) text = text.replace(cleanRegex, "[redacted]");
         if (typeof (text) === "string") text = text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
 
         text = beautify(text, {
