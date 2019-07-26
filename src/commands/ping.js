@@ -11,7 +11,7 @@ module.exports = {
     guildOnly: false,
     async execute(message, args, client, logger) {
         const sent = await message.channel.send("Terraforming Mars...");
-        const ping = client.config.web["ping-api"];
+        const ping = decodeURIComponent(client.config.web["ping-api"]);
 
         const { data: axelgxyz } = await axios.get(`${ping}axelg.xyz`);
         const { data: axelgreavettexyz } = await axios.get(`${ping}axelgreavette.xyz`);
