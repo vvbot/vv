@@ -31,9 +31,9 @@ client.once("ready", async () => {
     
     if(client.config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
 
-    client.user.setActivity(`${client.presence.activities[0].title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: client.presence.activities[0].type });
+    client.user.setActivity(`${client._presence.activities[0].title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: client._presence.activities[0].type });
     setInterval(() => {
-        let activity = client.presence.random();
+        let activity = client._presence.random();
         client.user.setActivity(`${activity.title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: activity.type });
     }, 300000);
 
@@ -63,6 +63,7 @@ client.on("message", async message => {
         if (command.usage) reply += `\nThe proper usage of that command is: \`${client.prefix}${command.name} ${command.usage}\``;
 
         message.channel.send(reply);
+        return;
     }
 
     if (command.guildOnly && message.channel.type !== "text") return message.channel.send("Please try executing this command inside a Guild.");
@@ -98,7 +99,10 @@ client.on("message", async message => {
             if (error) return logger.error(chalk.redBright(error));
         });
     } catch (error) {
-        if(command.preventDefualtError === true) return;
+        if(command.preventDefualtError === true) {
+            await message.channel.stopTyping();
+            return;
+        };
         logger.log("error", chalk.redBright(error));
         message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily");
         await message.channel.stopTyping();

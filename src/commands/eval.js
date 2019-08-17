@@ -15,7 +15,7 @@ module.exports = {
             
             return message.channel.send(client.clean(evaled), { code: "js", split: true });
         } catch(err) {
-            message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);
+            return message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);
         }
     }
 }

@@ -38,7 +38,9 @@ module.exports = class sh0danClient extends Discord.Client {
         
         this.sql = connection;
 
-        this.presence = {
+        this.github = "https://github.com/axelgreavette/sh0dan";
+
+        this._presence = {
             activities: [
                 { type: "PLAYING", title: "wi7h Axe1" },
                 { type: "PLAYING", title: "with my API" },
@@ -53,7 +55,7 @@ module.exports = class sh0danClient extends Discord.Client {
                 { type: "LISTENING", title: "songs about Git"},
                 { type: "LISTENING", title: "Technologic by Daft Punk" },
                 { type: "WATCHING", title: "over the Von Braun" },
-                { type: "WATCHING", tite: "Citadel Station" },
+                { type: "WATCHING", title: "Citadel Station" },
                 { type: "PLAYING", title: "with the End" },
                 { type: "PLAYING", title: "with The Many" },
                 { type: "PLAYING", title: "with the D-Zone" },
@@ -63,17 +65,27 @@ module.exports = class sh0danClient extends Discord.Client {
                 { type: "PLAYING", title: "Cards Against Humanity" }
             ],
             random: () => {
-                return this.randomItem(this.presence.activities);
+                return this.randomItem(this._presence.activities);
             },
             next: async (iteration = 1) => {
-                let current = { type: this.presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
-                let nextIndex = (iteration > this.presence.activities.length) ? this.presence.activities.length - 1: this.presence.activities.map(act => act.title).indexOf(current.title) + iteration;
-                await this.user.setActivity(`${this.presence.activities[nextIndex].title} | ${config.bot.prefix}help`, { url: "https://shodanbot.com", type: this.presence.activities[nextIndex].type });
+                let current = { type: this._presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
+                console.log(current);
+                let nextIndex = (iteration > this._presence.activities.length) ? this._presence.activities.length - 1: this._presence.activities.map(act => act.title).indexOf(current.title) + iteration;
+                console.log(nextIndex)
+                await this.user.setActivity(`${this._presence.activities[nextIndex].title} | ${config.bot.prefix}help`, { url: "https://shodanbot.com", type: this._presence.activities[nextIndex].type });
+                return {
+                    type: this._presence.activities[nextIndex].type,
+                    title: this._presence.activities[nextIndex].title
+                };
             },
             fix: async () => {
-                let current = { type: this.presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
-                let index = this.presence.activities.map(act => act.title).indexOf(current.title);
-                if(this.user.presence.game.type !== this.presence.activities[index].type) await this.user.setActivity(`this.presence.activities[index].title  | ${config.bot.prefix}help`, { url: "https://shodanbot.com", type: this.presence.activities[index].type });
+                let current = { type: this._presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
+                let index = this._presence.activities.map(act => act.title).indexOf(current.title);
+                if(this.user.presence.game.type !== this._presence.activities[index].type) await this.user.setActivity(`this._presence.activities[index].title  | ${config.bot.prefix}help`, { url: "https://shodanbot.com", type: this._presence.activities[index].type });
+                return {
+                    type: this._presence.activities[nextIndex].type,
+                    title: this._presence.activities[nextIndex].title
+                };
             },
         };
 
@@ -91,8 +103,6 @@ module.exports = class sh0danClient extends Discord.Client {
             },
             defaultColour: "36393F"
         };
-
-        
     }
 
     /**
@@ -154,28 +164,23 @@ module.exports = class sh0danClient extends Discord.Client {
      * Humanizes the bot's uptime
      */
     uptime() {
-        var msec = process.uptime().toFixed(0) * 1000;
-        var days = Math.floor(msec / 1000 / 60 / 60 / 24);
+        let msec = Number(process.uptime().toFixed(0)) * 1000;
+        let days = Math.floor(msec / 1000 / 60 / 60 / 24);
         msec -= days * 1000 * 60 * 60 * 24;
-        var hours = Math.floor(msec / 1000 / 60 / 60);
+        let hours = Math.floor(msec / 1000 / 60 / 60);
         msec -= hours * 1000 * 60 * 60;
-        var mins = Math.floor(msec / 1000 / 60);
+        let mins = Math.floor(msec / 1000 / 60);
         msec -= mins * 1000 * 60;
-        var secs = Math.floor(msec / 1000);
-        var timestr = "";
-        if (days > 0) {
-            timestr += days + "d ";
-        }
-        if (hours > 0) {
-            timestr += hours + "h ";
-        }
-        if (mins > 0) {
-            timestr += mins + "m ";
-        }
-        if (secs > 0) {
-            timestr += secs + "s";
-        }
-        return timestr
+        let secs = Math.floor(msec / 1000);
+
+        let timestr = "";
+
+        if (days > 0) timestr += days + " days ";
+        if (hours > 0) timestr += hours + " hours ";
+        if (mins > 0) timestr += mins + " minutes ";
+        if (secs > 0) timestr += secs + " seconds";
+
+        return timestr;
     }
 
 }
