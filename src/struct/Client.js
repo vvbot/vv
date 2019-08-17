@@ -4,6 +4,7 @@ const config = require("../../config.json");
 const { join } = require("path");
 const fs = require("fs");
 const beautify = require("js-beautify").js;
+const NekoClient = require('nekos.life');
 
 module.exports = class sh0danClient extends Discord.Client {
     constructor(options) {
@@ -39,6 +40,11 @@ module.exports = class sh0danClient extends Discord.Client {
         this.sql = connection;
 
         this.github = "https://github.com/axelgreavette/sh0dan";
+
+        const { sfw , nsfw } = new NekoClient();
+
+        this.nekos = sfw;
+        this.NSFW_nekos = nsfw;
 
         this._presence = {
             activities: [
