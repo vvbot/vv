@@ -1,5 +1,4 @@
 const { RichEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags")
 const axios = require("axios");
 
 module.exports = {

@@ -5,7 +5,7 @@ module.exports = {
     usage: "[CODE]",
     cooldown: 5,
     adminOnly: true,
-    preventDefualtError: true,
+    preventDefaultError: true,
     async execute(message, args, client, logger, Discord) {
         try {
             const code = args.join(" ");

@@ -5,6 +5,7 @@ const { join } = require("path");
 const fs = require("fs");
 const beautify = require("js-beautify").js;
 const NekoClient = require('nekos.life');
+const Util = require("../util/Util");
 
 module.exports = class sh0danClient extends Discord.Client {
     constructor(options) {
@@ -45,6 +46,8 @@ module.exports = class sh0danClient extends Discord.Client {
 
         this.nekos = sfw;
         this.NSFW_nekos = nsfw;
+
+        this.utils = Util;
 
         this._presence = {
             activities: [
@@ -188,5 +191,15 @@ module.exports = class sh0danClient extends Discord.Client {
 
         return timestr;
     }
+
+    /**
+     * Cuts off the end of a text block to shorten it to the length supplied to maxLen
+     * @param {String} text 
+     * @param {Integer}} maxLen 
+     */
+    shorten(text, maxLen = 2000) {
+        return text.length > maxLen ? `${text.substr(0,maxLen-3)}...` : text
+    }
+
 
 }

@@ -21,6 +21,7 @@ module.exports = {
             .addField("Alliances", res.alliances, true)
             .addField("Last Known Location:", res.last_location != "undefined" ? res.last_location : "Unknown", true)
             .setDescription(`**Desc.**: ${res.abilities_description}\n\n**Notes**: ${res.notes}`)
+            .setFooter("msnmacm.org")
         client.fixEmbed(embed);
         message.channel.send(embed);
     }

@@ -99,7 +99,7 @@ client.on("message", async message => {
             if (error) return logger.error(chalk.redBright(error));
         });
     } catch (error) {
-        if(command.preventDefualtError === true) {
+        if(command.preventDefaultError === true) {
             await message.channel.stopTyping();
             return;
         };

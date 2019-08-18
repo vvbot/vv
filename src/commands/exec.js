@@ -7,7 +7,7 @@ module.exports = {
     usage: "[COMMAND]",
     cooldown: 5,
     adminOnly: true,
-    preventDefualtError: true,
+    preventDefaultError: true,
     execute(message, args, client, logger) {
         try {
             const cmd = args.join(" ");
