@@ -14,8 +14,11 @@ module.exports = {
             if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
             
             return message.channel.send(client.clean(evaled), { code: "js", split: true });
-        } catch(err) {
-            return message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);
+        } catch(error) {
+            throw error.message;
         }
+    },
+    async error(message, args, client, error) {
+        return message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(error)}\n\`\`\``)
     }
 }

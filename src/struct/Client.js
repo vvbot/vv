@@ -145,11 +145,11 @@ module.exports = class sh0danClient extends Discord.Client {
      * @property {string} text The text to clean
      */
     clean (text) {
-        let cleanRegex = new RegExp(`(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.AGC.token}|${this.config.mysql.host}|${this.config.mysql.password}|${this.config.mysql.username})`, "g");
+        let cleanRegex = new RegExp(`(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.AGC.token}|${this.config.mysql.host}|${this.config.mysql.password}|${this.config.mysql.username}|${this.ws.connection.sessionID})`, "g");
 
-        if (text.indexOf(this.config.bot.token) !== -1 || text.indexOf(this.config.web["chewey-bot"]) !== -1 || text.indexOf(this.config.webhooks.AGC.token) !== -1 || text.indexOf(this.config.mysql.host) !== -1 || text.indexOf(this.config.mysql.username) !== -1) text = text.replace(cleanRegex, "[redacted]");
-        if (text.indexOf(decodeURIComponent(this.config.web["ping-api"])) !== -1) text = text.replace(decodeURIComponent(this.config.web["ping-api"]), "[redacted]");
-        if (text.indexOf(this.config.web["ping-api"]) !== -1) text = text.replace(this.config.web["ping-api"], "[redacted]");
+        if (text.indexOf(this.config.bot.token) !== -1 || text.indexOf(this.config.web["chewey-bot"]) !== -1 || text.indexOf(this.config.webhooks.AGC.token) !== -1 || text.indexOf(this.config.mysql.host) !== -1 || text.indexOf(this.config.mysql.username) !== -1 || text.indexOf(this.ws.connection.sessionID) !== -1) text = text.replace(cleanRegex, this.randomItem(["[redacted]", "[DATA EXPUNGED]", "[REMOVED]", "[SEE APPENDIUM INDEX A494-B]"]));
+        if (text.indexOf(decodeURIComponent(this.config.web["ping-api"])) !== -1) text = text.replace(decodeURIComponent(this.config.web["ping-api"]), this.randomItem(["[redacted]", "[DATA EXPUNGED]", "[REMOVED]", "[SEE APPENDIUM INDEX A494-B]"]));
+        if (text.indexOf(this.config.web["ping-api"]) !== -1) text = text.replace(this.config.web["ping-api"], this.randomItem(["[redacted]", "[DATA EXPUNGED]", "[REMOVED]", "[SEE APPENDIUM INDEX A494-B]"]));
         
         if (typeof (text) === "string") text = text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
 
@@ -166,13 +166,13 @@ module.exports = class sh0danClient extends Discord.Client {
      * @property {Array} array The array to select the random item from
      */
     randomItem (array) {
-        return array[~~(array.length * Math.random())]
+        return array[~~(array.length * Math.random())];
     }
 
     /**
      * Humanizes the bot's uptime
      */
-    uptime() {
+    uptime () {
         let msec = Number(process.uptime().toFixed(0)) * 1000;
         let days = Math.floor(msec / 1000 / 60 / 60 / 24);
         msec -= days * 1000 * 60 * 60 * 24;
@@ -198,7 +198,7 @@ module.exports = class sh0danClient extends Discord.Client {
      * @param {Integer}} maxLen 
      */
     shorten(text, maxLen = 2000) {
-        return text.length > maxLen ? `${text.substr(0,maxLen-3)}...` : text
+        return text.length > maxLen ? `${text.substr(0,maxLen-3)}...` : text;
     }
 
 

@@ -23,7 +23,10 @@ module.exports = {
             ctx.fillText(shortenText(ctx, text, 230), 60, 60);
             message.channel.send({ files: [{ attachment: canvas.toBuffer(), name: "achievement.png" }] });
         }catch(error){
-            message.channel.send("\`\`\`" + error + "\`\`\`");
+            throw error.message;
         }
+    },
+    async error(message, args, client, error) {
+        return message.channel.send("\`\`\`" + error + "\`\`\`");
     }
 }

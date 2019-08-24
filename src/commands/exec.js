@@ -15,8 +15,11 @@ module.exports = {
                 if(error) return error;
                 return message.channel.send(client.clean(stdout), { code: "xl", split: true })
             })
-        } catch (err) {
-            message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(err)}\n\`\`\``);
+        } catch (error) {
+            throw error.message;
         }
+    },
+    async error(message, args, client, error) {
+        return message.channel.send(`\`ERROR\` \`\`\`xl\n${client.clean(error)}\n\`\`\``)
     }
 }

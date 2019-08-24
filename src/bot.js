@@ -66,8 +66,8 @@ client.on("message", async message => {
         return;
     }
 
-    if (command.guildOnly && message.channel.type !== "text") return message.channel.send("Please try executing this command inside a Guild.");
-    if (command.disabled && !client.config.bot.admins.includes(message.author.id)) return;
+    if (command.guildOnly && message.channel.type !== "text") return message.channel.send("Please try executing this command inside of a Guild (server).");
+    if (command.disabled && !client.config.bot.admins.includes(message.author.id)) return message.channel.send("That command is either non-existant or (globally) it is disabled. Please try again later.");
     if (command.adminOnly && !client.config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunatly ${message.author} you lack the required clearance level for this command. Try contactign a system administrator for further assistance`);
     
     if (!client.cooldowns.has(command.name)) {
@@ -101,7 +101,7 @@ client.on("message", async message => {
     } catch (error) {
         if(command.preventDefaultError === true) {
             await message.channel.stopTyping();
-            return;
+            return await command.error(message, args, client, error);
         };
         logger.log("error", chalk.redBright(error));
         message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily");
@@ -112,7 +112,7 @@ client.on("message", async message => {
     }
 });
 
-client.on("debug", m => logger.debug( chalk.gray(m)));
+client.on("debug", m => logger.debug(chalk.gray(m)));
 client.on("warn", m => logger.warn(chalk.yellowBright(m)));
 client.on("error", m => logger.error(chalk.redBright(m)));
 
