@@ -54,6 +54,9 @@ module.exports = class Util {
             return v = Math.round(Math.random()) ? v.toUpperCase() : v.toLowerCase();
         }).join("");
     }
+    static wide(text) {
+        return text.split("").join(" ");
+    }
     static base64(text, mode = "encode") {
         if (mode === "encode") return Buffer.from(text).toString("base64");
         if (mode === "decode") return Buffer.from(text, "base64").toString("utf8") || null;
