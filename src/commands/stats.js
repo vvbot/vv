@@ -24,16 +24,10 @@ module.exports = {
         });
 
         const embed = new RichEmbed()
-            .setTitle("Bot Information")
-            .addField("Gateway:", client.ping.toFixed(2) + "ms", true)
-            .addField("Message:", sent.createdTimestamp - message.createdTimestamp + "ms", true)
-            .addField("axelg.xyz:", `${axelgxyz.avg.toFixed(2)}ms`, true)
-            .addField("axelgreavette.xyz", `${axelgreavettexyz.avg.toFixed(2)}ms`, true)
-            .addField("shodanbot.com", `${shodanbot.avg.toFixed(2)}ms`, true)
-            .addField("api.shodanbot.com", `${apishodanbot.avg.toFixed(2)}ms`, true)
+            .setTitle("Bot Statistics")
+            .addField("­", `Channels: **${client.channels.size}**\nUsers: **${client.users.size}**\nGuilds: **${client.guilds.size}**\nCommands: **${client.commands.size}**\nUptime: **${client.uptime().formatted}**\nRAM Usage: **${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB**`, true)
+            .addField("­", `Gateway: **${client.ping.toFixed(2)}**\nMessage: **${sent.createdTimestamp - message.createdTimestamp}ms**\naxelg.xyz: **${axelgxyz.avg.toFixed(2)}ms**\naxelgreavette.xyz: **${axelgreavettexyz.avg.toFixed(2)}ms**\nshodanbot.com: **${shodanbot.avg.toFixed(2)}**\napi.sh0danbot.com: **${apishodanbot.avg.toFixed(2)}ms**`, true)
             .setFooter(`Last updated ${new Date(updated[0].commit.author.date).toLocaleDateString("en-CA", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`)
-            .setURL(client.github)
-        client.fixEmbed(embed);
         return sent.edit(embed);
     }
 }

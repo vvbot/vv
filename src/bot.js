@@ -50,7 +50,6 @@ client.on("message", async message => {
     const [, prefix] = message.content.match(prefixRegex);
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     if(args.length === 0 || args[0] === "") return;
-    if(client.config.bot.debug_mode === true) logger.info(`Command run: ${chalk.green(args[0])}`);
     const commandName = args.shift().toLowerCase();
     
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -94,6 +93,7 @@ client.on("message", async message => {
         await message.channel.startTyping();
         await command.execute(message, args, client, logger, Discord);
         await message.channel.stopTyping();
+        if (client.config.bot.debug_mode === true) logger.info(`Command run: ${chalk.green(command.name)}`);
 
         client.sql.query(`UPDATE analytics SET commands_ran = commands_ran + 1 WHERE bot ="shodan"`, error => {
             if (error) return logger.error(chalk.redBright(error));

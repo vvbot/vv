@@ -171,6 +171,7 @@ module.exports = class sh0danClient extends Discord.Client {
 
     /**
      * Humanizes the bot's uptime
+     * @returns {object} An object containing a formatted time-string and a humanized time string
      */
     uptime () {
         let msec = Number(process.uptime().toFixed(0)) * 1000;
@@ -182,12 +183,27 @@ module.exports = class sh0danClient extends Discord.Client {
         msec -= mins * 1000 * 60;
         let secs = Math.floor(msec / 1000);
 
-        let timestr = "";
+        let timestr = {
+            formatted: "",
+            humanized: ""
+        };
 
-        if (days > 0) timestr += days + " days ";
-        if (hours > 0) timestr += hours + " hours ";
-        if (mins > 0) timestr += mins + " minutes ";
-        if (secs > 0) timestr += secs + " seconds";
+        if (days > 0) {
+            timestr.humanized += days + " days ";
+            timestr.formatted += days + "d ";
+        }
+        if (hours > 0) {
+            timestr.humanized += hours + " hours ";
+            timestr.formatted += hours + "h ";
+        }
+        if (mins > 0) {
+            timestr.humanized += mins + " minutes ";
+            timestr.formatted += mins + "m ";
+        }
+        if (secs > 0) {
+            timestr.humanized += secs + " seconds";
+            timestr.formatted += secs + "s ";
+        }
 
         return timestr;
     }
