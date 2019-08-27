@@ -6,6 +6,6 @@ module.exports = {
     cooldown: 5,
     async execute(message, args, client, logger) {
         let text = args.join(" ");
-        message.channel.send(client.utils.wide(text));
+        message.channel.send(client.shorten(client.utils.wide(text)));
     }
 }
