@@ -11,7 +11,7 @@ module.exports = {
         args = args.join(" ").split('" "');
         const embed = new RichEmbed()
             .setTitle(`New Update - ${args[0].replace(/"/g, "")}`)
-            .setDescription(args[1].replace(/"/g, "").replace(/<code>|<\/code>/, "`"))
+            .setDescription(args[1].replace(/"/g, "").replace(/<code>|<\/code>/g, "`"))
         client.fixEmbed(embed);
 
         const [rows, error] = await client.sql.execute("INSERT INTO `updates` (title, description) VALUES (?, ?)", [args[0].replace(/"/g, ""), args[1].replace(/"/g, "")]).catch(console.log);
