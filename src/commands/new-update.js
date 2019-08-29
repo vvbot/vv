@@ -14,8 +14,7 @@ module.exports = {
             .setDescription(args[1].replace(/"/g, "").replace(/<code>|<\/code>/, "`"))
         client.fixEmbed(embed);
 
-        const [rows, error] = await client.sql.execute("INSERT INTO `updates` (title, description) VALUES (?, ?)", [args[0].replace(/"/g, ""), args[1].replace(/"/g, "")]);
-        if (error.code > 0) throw JSON.stringify(error);
+        const [rows, error] = await client.sql.execute("INSERT INTO `updates` (title, description) VALUES (?, ?)", [args[0].replace(/"/g, ""), args[1].replace(/"/g, "")]).catch(console.log);
         message.channel.send("Successfully pushed update.");
         return client.webhooks.AGC.send(embed);
     }
