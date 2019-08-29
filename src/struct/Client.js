@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const _mysql = require("mysql");
+const _mysql = require("mysql2/promise");
 const config = require("../../config.json");
 const { join } = require("path");
 const fs = require("fs");
@@ -31,14 +31,14 @@ module.exports = class sh0danClient extends Discord.Client {
             AGC: new Discord.WebhookClient(config.webhooks.AGC.id, config.webhooks.AGC.token)
         }
 
-        const connection = _mysql.createConnection({
+        /*const connection = _mysql.createConnection({
             host: config.mysql.host,
             user: config.mysql.username,
             password: config.mysql.password,
             database: config.mysql.database
-        });
+        }); */
         
-        this.sql = connection;
+        //this.sql = connection;
 
         this.github = "https://github.com/axelgreavette/sh0dan";
 
@@ -215,5 +215,16 @@ module.exports = class sh0danClient extends Discord.Client {
      */
     shorten(text, maxLen = 2000) {
         return text.length > maxLen ? `${text.substr(0,maxLen-3)}...` : text;
+    }
+
+    async createConnection() {
+        const connection = await _mysql.createConnection({
+            host: config.mysql.host,
+            user: config.mysql.username,
+            password: config.mysql.password,
+            database: config.mysql.database
+        });
+
+        return this.sql = connection;
     }
 }

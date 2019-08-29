@@ -5,13 +5,14 @@ module.exports = {
     usage: "\"[TAG NAME]\"",
     aliases: ["remove-tag"],
     cooldown: 5,
-    execute(message, args, client, logger) {
+    async execute(message, args, client, logger) {
         args = args.join(" ").split('" "');
-        client.sql.query(`SELECT * FROM tags WHERE tagName = "${args[0].replace(/"/g, "")}"`, (error, rows, fields) => {
-            if(!message.author.id == rows[0].authorID && !client.config.bot.admins.includes(message.author.id)) return message.channel.send("You do not have the permissions required to delete that tag.");
-            else client.sql.query(`DELETE FROM tags WHERE tagName = "${args[0].replace(/"/g, "")}"`, (error, rows, fields) => {
-                message.channel.send("👌")
-            })
-        });
+        const [rows, error] = await client.sql.execute("SELECT authorID FROM `tags` WHERE `tagName` = ?", [args[0].replace(/"/g, "")]);
+        if(!message.author.id == rows[0] && !client.config.bot.admins.includes(message.author.id)) {
+            return message.channel.send("You do not have the permissions required to delete that tag.");
+        } else {
+            await client.sql.execute("DELETE FROM `tags` WHERE `tagName` = ?", [args[0].replace(/"/g, "")]);
+            message.channel.send("👌");
+        }
     }
 }

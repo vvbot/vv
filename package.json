@@ -23,7 +23,7 @@
     "js-beautify": "^1.10.0",
     "moment": "^2.24.0",
     "mysql": "^2.17.1",
-    "mysql2": "^1.6.5",
+    "mysql2": "^1.7.0",
     "nekos.life": "^2.0.4",
     "vhost": "^3.0.2",
     "winston": "^3.2.1"

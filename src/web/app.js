@@ -27,35 +27,33 @@ module.exports = client => {
     app.use("/", express.static(join(__dirname, "views")));
 
     app.get("/", async (req, res, next) => {
-        client.sql.query(`SELECT commands_ran FROM analytics WHERE bot ="shodan"`, (error, rows, fields) => {
-            let size = rows[0].commands_ran;
-            if (error) size = "ERROR";
-            renderObj.commands_run = size;
-        });
-        client.sql.query(`SELECT * from updates ORDER BY id DESC LIMIT 6`, (error, rows, fields) => {
-            renderObj.tile_one.title = rows[0].title;
-            renderObj.tile_one.description = rows[0].description;
-            renderObj.tile_one.version = rows[0].id
-            renderObj.tile_two.title = rows[1].title;
-            renderObj.tile_two.description = rows[1].description;
-            renderObj.tile_two.version = rows[1].id
-            renderObj.tile_three.title = rows[2].title;
-            renderObj.tile_three.description = rows[2].description;
-            renderObj.tile_three.version = rows[2].id
-            renderObj.tile_four.title = rows[3].title;
-            renderObj.tile_four.description = rows[3].description;
-            renderObj.tile_four.version = rows[3].id
-            renderObj.tile_five.title = rows[4].title;
-            renderObj.tile_five.description = rows[4].description;
-            renderObj.tile_five.version = rows[4].id
-            renderObj.tile_six.title = rows[5].title;
-            renderObj.tile_six.description = rows[5].description;
-            renderObj.tile_six.version = rows[5].id;
-        });
+        const [cmd_rows, cmd_error] = await client.sql.execute("SELECT `commands_ran` FROM `analytics` WHERE `bot` = ?", ["shodan"]).catch(console.log);
+        renderObj.commands_run = cmd_rows[0].commands_ran ? cmd_rows[0].commands_ran : "ERROR";
+        if(cmd_error) console.log(cmd_error);
+
+        const [updates_rows, updates_error] = await client.sql.query("SELECT * from `updates` ORDER BY `id` DESC LIMIT 6").catch(console.log);
+        renderObj.tile_one.title = updates_rows[0].title;
+        renderObj.tile_one.description = updates_rows[0].description;
+        renderObj.tile_one.version = updates_rows[0].id
+        renderObj.tile_two.title = updates_rows[1].title;
+        renderObj.tile_two.description = updates_rows[1].description;
+        renderObj.tile_two.version = updates_rows[1].id
+        renderObj.tile_three.title = updates_rows[2].title;
+        renderObj.tile_three.description = updates_rows[2].description;
+        renderObj.tile_three.version = updates_rows[2].id
+        renderObj.tile_four.title = updates_rows[3].title;
+        renderObj.tile_four.description = updates_rows[3].description;
+        renderObj.tile_four.version = updates_rows[3].id
+        renderObj.tile_five.title = updates_rows[4].title;
+        renderObj.tile_five.description = updates_rows[4].description;
+        renderObj.tile_five.version = updates_rows[4].id
+        renderObj.tile_six.title = updates_rows[5].title;
+        renderObj.tile_six.description = updates_rows[5].description;
+        renderObj.tile_six.version = updates_rows[5].id;
 
         renderObj.users = client.users.size;
         renderObj.guilds = client.guilds.size;
-        renderObj.commands_total = client.commands.array().length;
+        renderObj.commands_total = client.commands.size;
 
         res.render(join(__dirname, "views/index.hbs"), renderObj);
     })

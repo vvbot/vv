@@ -9,6 +9,9 @@ const moment = require("moment");
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const client = new sh0danClient();
+(async () => {
+    await client.createConnection();
+})()
 
 const anal = require("discord-bot-analytics");
 new anal(client.config.web["chewey-bot"], client);
@@ -37,9 +40,8 @@ client.once("ready", async () => {
         client.user.setActivity(`${activity.title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: activity.type });
     }, 300000);
 
-    client.sql.query(`UPDATE analytics SET startup_count = startup_count + 1 WHERE bot ="shodan"`, error => {
-        if(error) return logger.error(chalk.redBright(error));
-    });
+    const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `startup_count` = `startup_count` + 1 WHERE `bot` = ?", ["sh0dan"])
+    if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));
 
 });
 
@@ -95,21 +97,27 @@ client.on("message", async message => {
         await message.channel.stopTyping();
         if (client.config.bot.debug_mode === true) logger.info(`Command run: ${chalk.green(command.name)}`);
 
-        client.sql.query(`UPDATE analytics SET commands_ran = commands_ran + 1 WHERE bot ="shodan"`, error => {
-            if (error) return logger.error(chalk.redBright(error));
-        });
+        const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `commands_ran` = commands_ran + 1 WHERE bot = ?", ["sh0dan"])
+        if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));
     } catch (error) {
         if(command.preventDefaultError === true) {
             await message.channel.stopTyping();
             return await command.error(message, args, client, error);
         };
         logger.log("error", chalk.redBright(error));
-        message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily");
+        message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily.");
         await message.channel.stopTyping();
-        client.sql.query(`UPDATE analytics SET commands_failed = commands_failed + 1 WHERE bot = "shodan"`, error => {
-            if (error) return logger.error(chalk.redBright(error));
-        });
+        const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `commands_failed` = commands_failed + 1 WHERE bot = ?", ["sh0dan"])
+        if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));
     }
+});
+
+client.on("guildMemberAdd", async member => {
+    console.log(member.displayName, " joined");
+    const [rows, error] = await client.sql.execute("SELECT * FROM `auto-roles` WHERE `server` = ?", [member.guild.id]);
+    if(!rows[0]) return;
+    if(member.user.bot && rows[0].bot !== null) return member.addRole(rows[0].bot);
+    if(!member.user.bot && rows[0].user !== null) return member.addRole(rows[0].user);
 });
 
 client.on("debug", m => logger.debug(chalk.gray(m)));
