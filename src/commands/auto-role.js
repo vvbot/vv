@@ -21,7 +21,7 @@ module.exports = {
     E.g.: \`${client.prefix}auto-role view\``);
         } else if(args[0].toUpperCase() == "SET") {
             const roleID = message.guild.roles.find(r => r.id == args[2].match(/<@&(\d{18,})>/)[1]).id;
-            if(args[1].toUpperCase() == "BOT") {
+            if(args[1].toUpperCase() == "BOT" || args[1].toUpperCase() == "BOTS") {
                 const [rows, error] = await client.sql.execute("SELECT `server` FROM `auto-roles` WHERE `server` = ?", [message.guild.id]).catch(console.log);
                 if (!rows.length) {
                     await client.sql.execute("INSERT INTO `auto-roles` (server, bot, user) VALUES (?, ?, ?)", [message.guild.id, roleID, null]).catch(console.log);
@@ -30,7 +30,7 @@ module.exports = {
                     await client.sql.execute("UPDATE `auto-roles` SET `bot` =? WHERE `server` = ?", [roleID, message.guild.id]).catch(console.log);
                     return message.channel.send(`👌. Set the **Bot** auto-role for **${message.guild.name}** to **${args[2]}**`)
                 }
-            } else if(args[1].toUpperCase() == "USER") {
+            } else if(args[1].toUpperCase() == "USER" || args[1].toUpperCase() == "USERs") {
                 const [rows, error] = await client.sql.execute("SELECT `server` FROM `auto-roles` WHERE `server` = ?", [message.guild.id]).catch(console.log);
                 if(!rows.length) {
                     await client.sql.execute("INSERT INTO `auto-roles` (server, bot, user) VALUES (?, ?, ?)", [message.guild.id, null, roleID]).catch(console.log);
