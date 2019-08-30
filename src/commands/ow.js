@@ -12,7 +12,7 @@ module.exports = {
         if(!args.length) return;
         if (!["pc", "xbl", "psn"].includes(args[0].toLowerCase())) return message.reply("please choose a valid platform! `PC`, `XBL`, and `PSN` are currently accepted.");
         if (!["na", "eu", "kr"].includes(args[1].toLowerCase())) return message.reply("please choose a valid region! `NA`, `EU`, and `KR` are currently accepted.");
-        if(!args[2]) return message.reply("please provide a valid BattleTag! Example: `NISCU42#11305`")
+        if(!args[2]) return message.reply("please provide a valid BattleTag! Example: `axelg#11781`")
         else args[2] = args[2].replace("#", "-");
 
         const ow = await axios.get(`https://ow-api.com/v1/stats/${args[0].toLowerCase()}/${args[1].toLowerCase()}/${args[2]}/profile/`)
@@ -25,10 +25,10 @@ module.exports = {
             .addField("Level:", ow.data.level, true)
             .addField("Rating:", ow.data.ratingName ? ow.data.ratingName : "No rating", true)
             .addField("Total Games Won:", ow.data.gamesWon, true)
-            .addField("Cards Won:", ow.data.quickPlayStats.awards.cards, true)
-            .addField("Bronze Medals Won:", ow.data.quickPlayStats.awards.medalsBronze, true)
-            .addField("Silver Medals Won:",ow.data.quickPlayStats.awards.medalsSilver, true)
-            .addField("Gold Medals Won:", ow.data.quickPlayStats.awards.medalsGold, true)
+            .addField("Cards Won:", ow.data.quickPlayStats.awards.cards ? ow.data.quickPlayStats.awards.cards : "No cards won", true)
+            .addField("Bronze Medals Won:", ow.data.quickPlayStats.awards.medalsBronze ? ow.data.quickPlayStats.awards.medalsBronze : "No Bronze Medals won", true)
+            .addField("Silver Medals Won:", ow.data.quickPlayStats.awards.medalsSilver ? ow.data.quickPlayStats.awards.medalsSilver : "No Silver Medals won", true)
+            .addField("Gold Medals Won:", ow.data.quickPlayStats.awards.medalsGold ? ow.data.quickPlayStats.awards.medalsGold : "No Gold Medals won", true)
 
         client.fixEmbed(embed);
         message.channel.send(embed);

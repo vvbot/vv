@@ -113,7 +113,6 @@ client.on("message", async message => {
 });
 
 client.on("guildMemberAdd", async member => {
-    console.log(member.displayName, " joined");
     const [rows, error] = await client.sql.execute("SELECT * FROM `auto-roles` WHERE `server` = ?", [member.guild.id]);
     if(!rows[0]) return;
     if(member.user.bot && rows[0].bot !== null) return member.addRole(rows[0].bot);

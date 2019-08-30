@@ -29,7 +29,6 @@ module.exports = client => {
     app.get("/", async (req, res, next) => {
         const [cmd_rows, cmd_error] = await client.sql.execute("SELECT `commands_ran` FROM `analytics` WHERE `bot` = ?", ["shodan"]).catch(console.log);
         renderObj.commands_run = cmd_rows[0].commands_ran ? cmd_rows[0].commands_ran : "ERROR";
-        if(cmd_error) console.log(cmd_error);
 
         const [updates_rows, updates_error] = await client.sql.query("SELECT * from `updates` ORDER BY `id` DESC LIMIT 6").catch(console.log);
         renderObj.tile_one.title = updates_rows[0].title;
