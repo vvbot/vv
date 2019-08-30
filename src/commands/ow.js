@@ -25,10 +25,10 @@ module.exports = {
             .addField("Level:", ow.data.level, true)
             .addField("Rating:", ow.data.ratingName ? ow.data.ratingName : "No rating", true)
             .addField("Total Games Won:", ow.data.gamesWon, true)
-            .addField("Cards Won:", ow.data.quickPlayStats.awards.cards ? ow.data.quickPlayStats.awards.cards : "No cards won", true)
-            .addField("Bronze Medals Won:", ow.data.quickPlayStats.awards.medalsBronze ? ow.data.quickPlayStats.awards.medalsBronze : "No Bronze Medals won", true)
-            .addField("Silver Medals Won:", ow.data.quickPlayStats.awards.medalsSilver ? ow.data.quickPlayStats.awards.medalsSilver : "No Silver Medals won", true)
-            .addField("Gold Medals Won:", ow.data.quickPlayStats.awards.medalsGold ? ow.data.quickPlayStats.awards.medalsGold : "No Gold Medals won", true)
+            .addField("Cards Won:", ow.data.quickPlayStats.awards ? ow.data.quickPlayStats.awards.cards : "No cards won", true)
+            .addField("Bronze Medals Won:", ow.data.quickPlayStats.awards ? ow.data.quickPlayStats.awards.medalsBronze : "No Bronze Medals won", true)
+            .addField("Silver Medals Won:", ow.data.quickPlayStats.awards ? ow.data.quickPlayStats.awards.medalsSilver : "No Silver Medals won", true)
+            .addField("Gold Medals Won:", ow.data.quickPlayStats.awards ? ow.data.quickPlayStats.awards.medalsGold : "No Gold Medals won", true)
 
         client.fixEmbed(embed);
         message.channel.send(embed);
