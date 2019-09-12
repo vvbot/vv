@@ -218,11 +218,14 @@ module.exports = class sh0danClient extends Discord.Client {
     }
 
     async createConnection() {
-        const connection = await _mysql.createConnection({
+        const connection = await _mysql.createPool({
             host: config.mysql.host,
             user: config.mysql.username,
             password: config.mysql.password,
-            database: config.mysql.database
+            database: config.mysql.database,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
         });
 
         return this.sql = connection;

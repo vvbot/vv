@@ -11,7 +11,7 @@ const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const client = new sh0danClient();
 (async () => {
     await client.createConnection();
-})()
+})();
 
 const anal = require("discord-bot-analytics");
 new anal(client.config.web["chewey-bot"], client);
