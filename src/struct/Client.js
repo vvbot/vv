@@ -223,6 +223,10 @@ module.exports = class sh0danClient extends Discord.Client {
             user: config.mysql.username,
             password: config.mysql.password,
             database: config.mysql.database,
+            port: 25060,
+            ssl: {
+                ca: fs.readFileSync(join(__dirname, "..", "..", "security", "sh0dan.crt"))
+            },
             waitForConnections: true,
             connectionLimit: 10,
             queueLimit: 0
