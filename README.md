@@ -1,2 +1,2 @@
-sh0dan
-The very best Discord Bot
+sh0dan<br>
+A Discord bot to do it all.
