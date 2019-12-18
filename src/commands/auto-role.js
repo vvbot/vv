@@ -5,7 +5,6 @@ module.exports = {
     description: "Setup or turn off Auto Role functionality in your server.",
     adminOnly: true,
     usage: "[SET, RESET, REMOVE, or VIEW] [BOT or USER] [ROLE MENTION]",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         if(!args.length) {
             return message.channel.send(stripIndent`Please try using one of the following sub-commands:

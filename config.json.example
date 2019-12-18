@@ -12,7 +12,8 @@
     "web": {
         "chewey-bot": "chewey-bot api token",
         "express-port": "8089",
-        "ping-api": ""
+        "ping-api": "",
+        "domain-api-key": ""
     },
     "mysql": {
         "host": "mysql-host",

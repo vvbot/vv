@@ -6,7 +6,6 @@ module.exports = {
     description: "Where is the ISS?",
     args: false,
     usage: "",
-    cooldown: 5,
     guildOnly: false,
     async execute(message, args, client, logger) {
         const iss = await axios.get("https://api.wheretheiss.at/v1/satellites/25544")

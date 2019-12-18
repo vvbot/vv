@@ -13,6 +13,8 @@ const client = new sh0danClient();
     await client.createConnection();
 })();
 
+process.argv = process.argv.slice(2);
+
 const anal = require("discord-bot-analytics");
 new anal(client.config.web["chewey-bot"], client);
 
@@ -32,7 +34,7 @@ client.once("ready", async () => {
     logger.info(`Node Version: ${chalk.blue(process.version)}`);
     logger.info(`Discord.js Version ${chalk.blue(package.dependencies["discord.js"].replace("^", "v"))}`)   ;
     
-    if(client.config.bot.debug_mode === true) logger.info(chalk.grey("Started in DEBUG MODE"));
+    if(client.config.bot.debug_mode || process.argv[0] == "--debug") logger.info(chalk.grey("Started in DEBUG MODE"));
 
     client.user.setActivity(`${client._presence.activities[0].title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: client._presence.activities[0].type });
     setInterval(() => {
@@ -68,8 +70,8 @@ client.on("message", async message => {
     }
 
     if (command.guildOnly && message.channel.type !== "text") return message.channel.send("Please try executing this command inside of a Guild (server).");
-    if (command.disabled && !client.config.bot.admins.includes(message.author.id)) return message.channel.send("That command is either non-existant or (globally) it is disabled. Please try again later.");
-    if (command.adminOnly && !client.config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunatly ${message.author} you lack the required clearance level for this command. Try contactign a system administrator for further assistance`);
+    if (command.disabled && !client.config.bot.admins.includes(message.author.id)) return message.channel.send("That command is either non-existent or it is (globally) disabled. Please try again later.");
+    if (command.adminOnly && !client.config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunately ${message.author} you lack the required clearance level for this command. Try contacting a system administrator for further assistance`);
     
     if (!client.cooldowns.has(command.name)) {
         client.cooldowns.set(command.name, new Discord.Collection());
@@ -95,7 +97,7 @@ client.on("message", async message => {
         await message.channel.startTyping();
         await command.execute(message, args, client, logger, Discord);
         await message.channel.stopTyping();
-        if (client.config.bot.debug_mode === true) logger.info(`Command run: ${chalk.green(command.name)}`);
+        if (client.config.bot.debug_mode || process.argv[0] == "--debug") logger.info(`Command run: ${chalk.green(command.name)}`);
 
         const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `commands_ran` = commands_ran + 1 WHERE bot = ?", ["sh0dan"])
         if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));

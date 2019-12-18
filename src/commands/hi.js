@@ -4,7 +4,6 @@ module.exports = {
     aliases: ["hello.js"],
     args: false,
     usage: "",
-    cooldown: 5,
     hidden: true,
     execute(message, args, client, logger) {
         return message.channel.send(`hewwo OwO`)

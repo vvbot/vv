@@ -4,7 +4,6 @@ const { stripIndents } = require("common-tags")
 module.exports = {
     name: "info",
     description: "Information regarding my process, and my guardian.",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         const sent = await message.channel.send("Purging the Crew...");
 

@@ -4,7 +4,7 @@ module.exports = {
     name: "list-tags",
     description: "List top 20 user created functions (tags)",
     aliases: ["all-tags", "tags"],
-    cooldown: 5,
+    
     disabled: true,
     async execute(message, args, client, logger) {
         const [rows] = await client.sql.execute("SELECT `tagName` from `tags` LIMIT 20");

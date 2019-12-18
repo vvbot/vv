@@ -3,7 +3,6 @@ module.exports = {
     description: "Load a file within the commands folder",
     args: false,
     usage: "[CODE]",
-    cooldown: 5,
     adminOnly: true,
     preventDefaultError: true,
     async execute(message, args, client, logger, Discord) {

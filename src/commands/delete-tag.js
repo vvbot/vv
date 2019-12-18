@@ -4,7 +4,7 @@ module.exports = {
     args: true,
     usage: "\"[TAG NAME]\"",
     aliases: ["remove-tag"],
-    cooldown: 5,
+    
     async execute(message, args, client, logger) {
         args = args.join(" ").split('" "');
         const [rows, error] = await client.sql.execute("SELECT authorID FROM `tags` WHERE `tagName` = ?", [args[0].replace(/"/g, "")]);

@@ -5,7 +5,6 @@ module.exports = {
     description: "Creates a new update tile for my online interface.",
     args: true,
     usage: "[TITLE] [DESCRIPTION]",
-    cooldown: 5,
     adminOnly: true,
     async execute(message, args, client, logger) {        
         args = args.join(" ").split('" "');

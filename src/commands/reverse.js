@@ -3,7 +3,6 @@ module.exports = {
     description: "Reverses the given string",
     args: true,
     usage: "[STRING]",
-    cooldown: 5,
     guildOnly: false,
     disabled: true,
     execute(message, args, client, logger) {

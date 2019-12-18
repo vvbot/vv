@@ -4,7 +4,6 @@ module.exports = {
     aliases: ["clapme"],
     args: true,
     usage: "[STRING]",
-    cooldown: 5,
     execute(message, args, client, logger) {
         return message.channel.send(args.join(" 👏 "));
     }

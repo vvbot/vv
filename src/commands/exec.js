@@ -5,7 +5,6 @@ module.exports = {
     description: "Load a file within the commands folder.",
     args: false,
     usage: "[COMMAND]",
-    cooldown: 5,
     adminOnly: true,
     preventDefaultError: true,
     execute(message, args, client, logger) {

@@ -2,7 +2,7 @@ module.exports = {
     name: "steal-emojis",
     description: "Takes emojis from the current server and adds them to the \"Poorly Managed Dumpster\"",
     args: false,
-    cooldown: 5,
+    
     adminOnly: true,
     async execute(message, args, client, logger, Discord) {
         const pmd = client.guilds.find(g => g.name == "Poorly Managed Dumpster");

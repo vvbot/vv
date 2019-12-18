@@ -5,7 +5,6 @@ module.exports = {
     description: "Retrieves information about the current guild",
     args: false,
     usage: "",
-    cooldown: 5,
     guildOnly: true,
     execute(message, args, client, logger) {
         const embed = new RichEmbed()

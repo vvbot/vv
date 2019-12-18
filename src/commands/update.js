@@ -4,7 +4,6 @@ module.exports = {
     name: "update",
     description: "Get info about the latest update or a specific update",
     usage: "[ID (OPTIONAL)]",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         if(args.length) {
             const [rows, error] = await client.sql.execute("SELECT * FROM updates WHERE id = ?", [args[0]]);

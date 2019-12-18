@@ -3,7 +3,6 @@ module.exports = {
     description: "View a user created function (tag)",
     //args: true,
     usage: "[TAG NAME]",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         args = args.join(" ");
         const [rows] = await client.sql.execute("SELECT * FROM `tags` WHERE `tagName` = ?", [args.toUpperCase()]);

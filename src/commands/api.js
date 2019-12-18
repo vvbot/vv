@@ -4,7 +4,6 @@ module.exports = {
     name: "api",
     description: "Information about sh0dan's API",
     usage: "",
-    cooldown: 5,
     execute(message, args, client, logger) {
         const embed = new RichEmbed()
             .setTitle("sh0dan API")

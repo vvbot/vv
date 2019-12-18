@@ -1,10 +1,11 @@
 {
   "name": "sh0dan",
-  "version": "1.1.1",
-  "description": "A complete rewrite of my first Discord Bot and overall code project",
+  "version": "1.2.1",
+  "description": "A complete rewrite of my very first Discord Bot and overall code project.",
   "main": "src/bot.js",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "debug": "node . --debug"
   },
   "author": "Axel Greavette",
   "license": "ISC",

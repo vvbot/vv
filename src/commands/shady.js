@@ -3,7 +3,6 @@ module.exports = {
     description: "ShadY TExt",
     args: true,
     usage: "[TEXT]",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         let text = args.join(" ");
         //(args.length !== 0) ? text = args.join(" ") : text =  await message.channel.fetchMessages({ limit: 3 }).filter(msg => message.author.id === msg.author.id).array().map(msg =>  msg.content )[2];

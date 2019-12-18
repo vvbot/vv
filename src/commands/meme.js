@@ -6,7 +6,6 @@ module.exports = {
     description: "Returns a simple text-based meme",
     args: false,
     usage: "",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         const meme = await axios.get("http://api.chew.pro/trbmb");
         const embed = new RichEmbed()

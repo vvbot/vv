@@ -6,7 +6,6 @@ module.exports = {
     description: "Indexes the MSNMACM network (https://msnmacm.org).",
     args: true,
     usage: "[INDEX]",
-    cooldown: 5,
     async execute(message, args, client, logger) { 
         if(args[0] == "list" ) {
             const { data: res } = await axios({

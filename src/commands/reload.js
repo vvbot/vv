@@ -5,7 +5,7 @@ module.exports = {
     description: "Reload a command within the bot process",
     args: true,
     aliases: ["rl"],
-    cooldown: 5,
+    
     adminOnly: true,
     execute(message, args, client, logger) {
         if(!client.commands.get(args[0])) return message.channel.send(`That command couldn't be found within my processes. Try loading it with **s_load ${args[0]}**`);

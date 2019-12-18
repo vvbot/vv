@@ -4,7 +4,7 @@ module.exports = {
     args: false,
     usage: "",
     hidden: true,
-    cooldown: 5,
+    
     execute(message, args, client, logger) {
         return message.channel.send("This feature is currently not supported. Look for it in a coming update!");
     }

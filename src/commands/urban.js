@@ -6,7 +6,6 @@ module.exports = {
     description: "Searches the urban dictionary for the provided term",
     args: true,
     usage: "",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         const definition = await axios.get(`https://api.urbandictionary.com/v0/define?term=${args[0]}`);
         const embed = new RichEmbed()

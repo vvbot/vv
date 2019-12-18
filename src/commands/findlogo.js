@@ -6,7 +6,6 @@ module.exports = {
     args: true,
     aliases: ["logo"],
     usage: "[WEBSITE OR COMPANY NAME]",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         const embed = new RichEmbed()
             .setTitle("Your logo is served:")

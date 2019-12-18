@@ -6,7 +6,6 @@ module.exports = {
     description: "Insults someone",
     args: true,
     usage: "[USER]",
-    cooldown: 5,
     guildOnly: false,
     async execute(message, args, client, logger) {
         const insultee = client.findMember(message, args[0], false);

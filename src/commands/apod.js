@@ -6,7 +6,6 @@ module.exports = {
     description: "Returns the Astronomy Picture of the Day",
     args: false,
     usage: "",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         const apod = await axios.get("https://api.nasa.gov/planetary/apod?api_key=H4CFOXuqE5jfle1VkvMDhoLBfRboxyOlC2VncL2m");
         const embed = new RichEmbed()

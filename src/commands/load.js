@@ -5,7 +5,6 @@ module.exports = {
     description: "Load a command into the bot process",
     args: true,
     usage: "",
-    cooldown: 5,
     adminOnly: true,
     execute(message, args, client, logger) {
         let cmd;

@@ -4,7 +4,6 @@ module.exports = {
     args: true,
     usage: "\"[TAG NAME]\" \"[TAG CONTENT]\"",
     aliases: ["new-tag"],
-    cooldown: 5,
     async execute(message, args, client, logger) {
         args = args.join(" ").split('" "');
         const [tags] = await client.sql.execute("SELECT * FROM `tags` WHERE tagName = ?", [args[0].replace(/"/g, "")]);

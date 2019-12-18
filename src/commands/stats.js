@@ -4,7 +4,6 @@ const axios = require("axios");
 module.exports = {
     name: "stats",
     description: "On the dot statistics.",
-    cooldown: 5,
     aliases: ["statistics"],
     async execute(message, args, client, logger) {
         const sent = await message.channel.send("Preforming Calculations...");

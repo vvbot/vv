@@ -5,7 +5,6 @@ module.exports = {
     name: "xkcd",
     description: "xkcd comics",
     usage: "[MESSAGE]",
-    cooldown: 5,
     async execute(message, args, client, logger) {
         let url;
         if (args.length) url = `https://xkcd.com/${args[0]}/info.0.json`;

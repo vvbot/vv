@@ -7,7 +7,6 @@ module.exports = {
     aliases: ["pong"],
     args: false,
     usage: "",
-    cooldown: 5,
     guildOnly: false,
     async execute(message, args, client, logger) {
         const sent = await message.channel.send("Terraforming Mars...");

@@ -4,7 +4,7 @@ module.exports = {
     name: "event.d",
     description: "Bzzt - EVNT M3 -..##",
     hidden: true,
-    cooldown: 5,
+    
     execute(message, args, client, logger) {
         return message.channel.send(stripIndent`
         {
