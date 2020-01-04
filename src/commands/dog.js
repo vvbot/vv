@@ -6,7 +6,7 @@ module.exports = {
     description: "Gives dog",
     usage: "",
     async execute(message, args, client, logger) {
-        const dog = await axios.get("https://api.chewey-bot.ga/dog", { headers: { "Authorization": client.config.web["chewey-bot"] }});
+        const dog = await axios.get("https://api.chewey-bot.top/dog", { headers: { "Authorization": client.config.web["chewey-bot"] }});
         const embed = new RichEmbed()
             .setTitle("Dog:")
             .setImage(dog.data.data)

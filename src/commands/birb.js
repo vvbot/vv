@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["bird"],
     usage: "",
     async execute(message, args, client, logger) {
-        const { data: birb} = await axios.get("https://api.chewey-bot.ga/birb", { headers: { "Authorization": client.config.web["chewey-bot"] }});
+        const { data: birb} = await axios.get("https://api.chewey-bot.top/birb", { headers: { "Authorization": client.config.web["chewey-bot"] }});
         const embed = new RichEmbed()
             .setTitle("Cat:")
             .setImage(birb.data)
