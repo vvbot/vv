@@ -48,7 +48,9 @@ client.once("ready", async () => {
 });
 
 client.on("message", async message => {
-    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefix)}|${escapeRegex(client.prefix.toUpperCase())})\\s*`);
+    let customPrefix = await client.prefixes.personal.get(message.author.id);
+
+    const prefixRegex = customPrefix ? new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefixes.global)}|${escapeRegex(client.prefixes.global.toUpperCase())}|${escapeRegex(customPrefix)}|${escapeRegex(customPrefix.toUpperCase())})\\s*`) : new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefixes.global)}|${escapeRegex(client.prefixes.global.toUpperCase())})\\s*`);
     if (!prefixRegex.test(message.content) || message.author.bot) return;
 
     const [, prefix] = message.content.match(prefixRegex);
@@ -94,21 +96,21 @@ client.on("message", async message => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownTime);
 
     try {
-        await message.channel.startTyping();
+        message.channel.startTyping();
         await command.execute(message, args, client, logger, Discord);
-        await message.channel.stopTyping();
+        message.channel.stopTyping();
         if (client.config.bot.debug_mode || process.argv[0] == "--debug") logger.info(`Command run: ${chalk.green(command.name)}`);
 
         const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `commands_ran` = commands_ran + 1 WHERE bot = ?", ["sh0dan"])
         if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));
     } catch (error) {
         if(command.preventDefaultError === true) {
-            await message.channel.stopTyping();
+            message.channel.stopTyping();
             return await command.error(message, args, client, error);
         };
         logger.log("error", chalk.redBright(error));
         message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily.");
-        await message.channel.stopTyping();
+        message.channel.stopTyping();
         const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `commands_failed` = commands_failed + 1 WHERE bot = ?", ["sh0dan"])
         if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));
     }

@@ -10,6 +10,7 @@
   "author": "Axel Greavette",
   "license": "ISC",
   "dependencies": {
+    "@keyv/mysql": "^1.1.4",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "canvas": "^2.6.1",
@@ -22,6 +23,7 @@
     "hbs": "^4.0.6",
     "helmet": "^3.21.2",
     "js-beautify": "^1.10.2",
+    "keyv": "^4.0.0",
     "moment": "^2.24.0",
     "mysql2": "^1.7.0",
     "nekos.life": "^2.0.4",

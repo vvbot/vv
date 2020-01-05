@@ -6,6 +6,7 @@ const fs = require("fs");
 const beautify = require("js-beautify").js;
 const NekoClient = require('nekos.life');
 const Util = require("../util/Util");
+const KeyV = require("keyv");
 
 module.exports = class sh0danClient extends Discord.Client {
     constructor(options) {
@@ -16,7 +17,15 @@ module.exports = class sh0danClient extends Discord.Client {
         this.cooldowns = new Discord.Collection();
         const Commands = fs.readdirSync(this.commandsFolder).filter(file => file.endsWith(".js"));
         
-        this.prefix = config.bot.prefix;
+        this.prefix = config.bot.prefix
+        this.prefixes = {
+            global: config.bot.prefix,
+            personal: new KeyV(`mysql://${config.mysql.username}:${config.mysql.password}@${config.mysql.host}:25060/${config.mysql.database}`, {
+                table: "prefixes",
+            })
+        };
+        this.prefixes.personal.on("error", console.log);
+
         this.config = config;
 
         this.giveaways = new Discord.Collection();

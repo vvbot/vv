@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const RichEmbed = require("../struct/RichEmbed");
 const axios = require("axios");
 
 module.exports = {
@@ -21,11 +21,11 @@ module.exports = {
             .setTitle("Pong!")
             .addField("Gateway:", client.ping.toFixed(2) + "ms", true)
             .addField("Message:", sent.createdTimestamp - message.createdTimestamp + "ms", true)
-            .addField("axelg.xyz:", `${axelgxyz.avg.toFixed(2)}ms`, true)
-            .addField("axelgreavette.xyz", `${axelgreavettexyz.avg.toFixed(2)}ms`, true)
-            .addField("shodanbot.com", `${shodanbot.avg.toFixed(2)}ms`, true)
-            .addField("api.shodanbot.com", `${apishodanbot.avg.toFixed(2)}ms`, true)
-        client.fixEmbed(embed);
+            .addField("axelg.xyz:", axelgxyz.avg ? `${axelgxyz.avg.toFixed(2)}ms` : "Unknown", true)
+            .addField("axelgreavette.xyz", axelgreavettexyz.avg ? `${axelgreavettexyz.avg.toFixed(2)}ms` : "Unknown", true)
+            .addField("shodanbot.com", shodanbot.avg ? `${shodanbot.avg.toFixed(2)}ms` : "Unknown", true)
+            .addField("api.shodanbot.com", apishodanbot.avg ? `${apishodanbot.avg.toFixed(2)}ms` : "Unknown", true)
+            .fix();
         return sent.edit(embed);
     }
 }
