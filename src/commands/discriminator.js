@@ -3,8 +3,8 @@ const { stripIndents } = require("common-tags");
 module.exports = {
     name: "discriminator",
     aliases: ["discrim", "search-discrim", "search-discriminator"],
-    description: "Searches for other users with your desired descriminator",
-    async execute(message, args, client, logger, Discord) {
+    description: "Searches for other users with your desired discriminator",
+    async execute(message, args, client, Discord) {
         const discrim = args.length !== 0 ? args.join(" ") : message.author.discriminator;
         
         if (!/^[0-9]+$/.test(discrim) && !discrim.length === 4) {

@@ -1,41 +1,36 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: "help",
-    description: "Lists all of my commands or information related to a singularity",
+    description: "Info about commands I have. It's like a book, but better?",
     args: false,
-    usage: "[COMMAND NAME (Optional)]",
+    usage: "<?command name>",
     guildOnly: false,
-    execute(message, args, client, logger) {
+    execute(message, args, client) {
         const body = [];
         const { commands } = message.client;
 
-        const embed = new RichEmbed()
-            .setTitle("Help has been sent to your DMs via a Cortex Reaver")
-            .setThumbnail("https://vignette.wikia.nocookie.net/shodan/images/d/da/CortexReaver_Icon.png/revision/latest?cb=20160718025241")
-        client.fixEmbed(embed);
-        
         if(!args.length) {
             body.push("Here is a list of all my functions:\n");
             body.push(commands.filter(command => {
                 if (command.hidden|| command.disabled || command.adminOnly) return false;
                 return true
             }).map(command => `**${command.name}** :: ${command.description}`).join("\n"));
-            body.push(`\nYou can utilise **${client.prefix}help [COMMAND NAME]** or **${client.user}help [COMMAND NAME]** for further information`);
+            body.push(`\nYou can use **${client.prefix}help <command name>** or **${client.user}help <command name>** for further information`);
 
             return message.author.send(body, { split: true}).then(() => {
                 if (message.channel.type === "dm") return;
-                message.channel.send(embed);
+                message.channel.send("I sent you a DM.");
             }).catch(e => {
                 console.error(`Was unable to send \`HELP DM\` to ${message.author.tag}.\n`, e);
-                message.reply("I was unable to DM you. Please check you have DMs enabled.");
+                message.reply("I couldn't DM you. Make sure you have your DMs open.");
             })
         }
 
         const name = args[0].toLowerCase();
         const command = commands.get(name || commands.find(cmd => cmd.aliases && cmd.aliases.includes(name)));
 
-        if(!command) return message.channel.send(`404 requested function (**${name}**) was not found.`);
+        if(!command) return message.channel.send(`I couldn't find this "${name}" command. Try again maybe?`);
 
         body.push(`**Name:** ${command.name}`);
 

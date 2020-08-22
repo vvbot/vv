@@ -3,7 +3,7 @@ module.exports = {
     description: "__Globally__ disable the given command. If already disabled it will stay that way.",
     adminOnly: true,
     usage: "[COMMAND NAME]",
-    execute(message, args, client, logger) {
+    execute(message, args, client) {
         const commandName = args.join(" ");
         const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 

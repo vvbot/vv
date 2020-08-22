@@ -9,7 +9,7 @@ module.exports = {
     description: "Sends a Minecraft achievement with the text of your choice.",
     args: true,
     preventDefaultError: true,
-    async execute(message, args, client, logger) {
+    async execute(message, args, client) {
         try {
             const text = args.join(" ");
             const base = await loadImage(join(__dirname, "..", "..", "assets", "image", "bin", "achievement.png"));
@@ -21,7 +21,7 @@ module.exports = {
             ctx.fillText("Achievement Get!", 60, 40);
             ctx.fillStyle = "#ffffff";
             ctx.fillText(shortenText(ctx, text, 230), 60, 60);
-            message.channel.send({ files: [{ attachment: canvas.toBuffer(), name: "achievement.png" }] });
+            await message.channel.send({files: [{attachment: canvas.toBuffer(), name: "achievement.png"}]});
         }catch(error){
             throw error.message;
         }

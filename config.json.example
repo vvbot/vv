@@ -15,12 +15,6 @@
         "ping-api": "",
         "domain-api-key": ""
     },
-    "mysql": {
-        "host": "mysql-host",
-        "password": "mysql-password",
-        "database": "mysql-database",
-        "username": "mysql-username"
-    },
     "webhooks": {
         "AGC": {
             "id": "webhook-id",

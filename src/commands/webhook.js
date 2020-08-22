@@ -1,12 +1,13 @@
 module.exports = {
     name: "webhook",
-    description: "Sends a message through one of my sub routines",
+    description: "Sends a message through one of MY bots",
     args: true,
-    usage: "[MESSAGE]",
+    usage: "<message>",
+    aliases: ["hook"],
     adminOnly: true,
-    async execute(message, args, client, logger) {        
+    async execute(message, args, client) {        
         args = args.join(" ");
 
-        client.webhooks.AGC.send(args);
+        client.webhooks.N.send(args);
     }
 }

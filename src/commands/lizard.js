@@ -1,17 +1,16 @@
-const { RichEmbed } = require("discord.js");
-
+const { MessageEmbed } = require("discord.js");
 module.exports = {
     name: "lizard",
     description: "Gets lizard",
     usage: "",
-    async execute(message, args, client, logger) {
-        const { url } = await client.nekos.lizard();
-        const embed = new RichEmbed()
+    async execute(message, args, client) {
+        const { url } = await client.goodNekos.lizard();
+        const embed = new MessageEmbed()
             .setTitle("Lizard:")
             .setImage(url)
             .setFooter("Powered by nekos.life")
 
-        client.fixEmbed(embed);
+         .setColor(0xFF69B4);
         return message.channel.send(embed);
     }
 }

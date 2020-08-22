@@ -5,7 +5,7 @@ module.exports = {
     usage: "[STRING]",
     guildOnly: false,
     disabled: true,
-    execute(message, args, client, logger) {
+    execute(message, args, client) {
         if(args.length > 1) args = args.join(" ");
         message.channel.send(args.split("").reverse().join(""));
     }

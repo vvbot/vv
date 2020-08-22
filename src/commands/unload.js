@@ -4,7 +4,7 @@ module.exports = {
     args: false,
     usage: "[COMMAND TO UNLOAD]",
     adminOnly: true,
-    execute(message, args, client, logger) {
+    execute(message, args, client) {
         if(!client.commands.get(args[0])) return message.channel.send(`No command was found for that query: \`${args[0]}\``);
         delete require.cache[require.resolve(`./${args[0]}.js`)];
         client.commands.delete(args[0]);

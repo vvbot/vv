@@ -1,6 +1,8 @@
+//TODO: Update for Discord.js V12.0.1
+
 require("dotenv").config();
 const Discord = require("discord.js");
-const sh0danClient = require("./struct/Client");
+const VV = require("./struct/Client");
 const package = require("../package.json");
 const winston = require("winston");
 const chalk = require("chalk");
@@ -8,15 +10,9 @@ const moment = require("moment");
 
 const escapeRegex = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-const client = new sh0danClient();
-(async () => {
-    await client.createConnection();
-})();
+const client = new VV();
 
 process.argv = process.argv.slice(2);
-
-const anal = require("discord-bot-analytics");
-new anal(client.config.web["chewey-bot"], client);
 
 const logger = winston.createLogger({
     transports: [
@@ -36,49 +32,53 @@ client.once("ready", async () => {
     
     if(client.config.bot.debug_mode || process.argv[0] == "--debug") logger.info(chalk.grey("Started in DEBUG MODE"));
 
-    client.user.setActivity(`${client._presence.activities[0].title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: client._presence.activities[0].type });
+    await client.user.setActivity("with Axel", { type: client._presence.activities[0].type });
     setInterval(() => {
         let activity = client._presence.random();
-        client.user.setActivity(`${activity.title} | ${client.prefix}help`, { url: "https://shodanbot.com", type: activity.type });
+        client.user.setActivity(activity.title, { type: activity.type });
     }, 300000);
-
-    const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `startup_count` = `startup_count` + 1 WHERE `bot` = ?", ["sh0dan"])
-    if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));
 
 });
 
 client.on("message", async message => {
-    let customPrefix = await client.prefixes.personal.get(message.author.id);
 
-    const prefixRegex = customPrefix ? new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefixes.global)}|${escapeRegex(client.prefixes.global.toUpperCase())}|${escapeRegex(customPrefix)}|${escapeRegex(customPrefix.toUpperCase())})\\s*`) : new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefixes.global)}|${escapeRegex(client.prefixes.global.toUpperCase())})\\s*`);
+    //Prefix Logic
+    const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(client.prefix)})`);
     if (!prefixRegex.test(message.content) || message.author.bot) return;
 
+    //Search for words that look like a command
     const [, prefix] = message.content.match(prefixRegex);
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     if(args.length === 0 || args[0] === "") return;
     const commandName = args.shift().toLowerCase();
     
+    //Get dat command
     const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
+    //Check for a command
     if (!command) return;
 
+    //Check for command arguments
     if (command.args && !args.length) {
         let reply = `No arguments were provided`;
 
         if (command.usage) reply += `\nThe proper usage of that command is: \`${client.prefix}${command.name} ${command.usage}\``;
 
-        message.channel.send(reply);
+        await message.channel.send(reply);
         return;
     }
 
+    //Checks for guildOnly, disabled, adminOnly, and nsfw
     if (command.guildOnly && message.channel.type !== "text") return message.channel.send("Please try executing this command inside of a Guild (server).");
     if (command.disabled && !client.config.bot.admins.includes(message.author.id)) return message.channel.send("That command is either non-existent or it is (globally) disabled. Please try again later.");
     if (command.adminOnly && !client.config.bot.admins.includes(message.author.id)) return message.channel.send(`Unfortunately ${message.author} you lack the required clearance level for this command. Try contacting a system administrator for further assistance`);
-    
+    if (command.nsfw && !message.channel.nsfw) return message.channel.send("I can't do that outside of an NSFW channel :\(")
+
+    //Check for command cooldowns
     if (!client.cooldowns.has(command.name)) {
         client.cooldowns.set(command.name, new Discord.Collection());
     }
-
+    //If we find a cooldown make it happen
     const now = Date.now();
     const timestamps = client.cooldowns.get(command.name);
     const cooldownTime = (command.cooldown || 3) * 1000;
@@ -91,36 +91,25 @@ client.on("message", async message => {
             return message.reply(`${message.channel.type === "dm" ? "T" : ", t"}hat command (**${command.name}**) is unusable for another ${moment("2015-01-01").startOf("day").seconds(timeLeft).format("h m s")}. Please be patient.`);
         }
     }
-
+    //Unless the user is an admin of the bot
     if (!client.config.bot.admins.includes(message.author.id)) timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownTime);
 
+    //Actually send the command result IF it passes all the previous checks
     try {
         message.channel.startTyping();
-        await command.execute(message, args, client, logger, Discord);
+        await command.execute(message, args, client, Discord);
         message.channel.stopTyping();
         if (client.config.bot.debug_mode || process.argv[0] == "--debug") logger.info(`Command run: ${chalk.green(command.name)}`);
-
-        const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `commands_ran` = commands_ran + 1 WHERE bot = ?", ["sh0dan"])
-        if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));
     } catch (error) {
         if(command.preventDefaultError === true) {
             message.channel.stopTyping();
             return await command.error(message, args, client, error);
         };
         logger.log("error", chalk.redBright(error));
-        message.channel.send("Oh no! There was an error trying to execute that command! Please try again momentarily.");
+        await message.channel.send("Shit, there was an error trying to execute that command! Please try again momentarily.");
         message.channel.stopTyping();
-        const [rows, sql_error] = await client.sql.execute("UPDATE `analytics` SET `commands_failed` = commands_failed + 1 WHERE bot = ?", ["sh0dan"])
-        if (sql_error) return logger.error(chalk.redBright(JSON.stringify(sql_error)));
     }
-});
-
-client.on("guildMemberAdd", async member => {
-    const [rows, error] = await client.sql.execute("SELECT * FROM `auto-roles` WHERE `server` = ?", [member.guild.id]);
-    if(!rows[0]) return;
-    if(member.user.bot && rows[0].bot !== null) return member.addRole(rows[0].bot);
-    if(!member.user.bot && rows[0].user !== null) return member.addRole(rows[0].user);
 });
 
 client.on("debug", m => logger.debug(chalk.gray(m)));
@@ -129,5 +118,4 @@ client.on("error", m => logger.error(chalk.redBright(m)));
 
 //process.on("uncaughtException", error => logger.error(chalk.redBright(error)));
 
-require("./web/app.js")(client);
-client.login(client.config.bot.token);
+client.login(client.config.bot.token).then(()=>{});

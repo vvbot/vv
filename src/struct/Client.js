@@ -1,14 +1,12 @@
 const Discord = require("discord.js");
-const _mysql = require("mysql2/promise");
 const config = require("../../config.json");
 const { join } = require("path");
 const fs = require("fs");
 const beautify = require("js-beautify").js;
 const NekoClient = require('nekos.life');
 const Util = require("../util/Util");
-const KeyV = require("keyv");
 
-module.exports = class sh0danClient extends Discord.Client {
+module.exports = class VV extends Discord.Client {
     constructor(options) {
         super(options);
         
@@ -18,13 +16,6 @@ module.exports = class sh0danClient extends Discord.Client {
         const Commands = fs.readdirSync(this.commandsFolder).filter(file => file.endsWith(".js"));
         
         this.prefix = config.bot.prefix
-        this.prefixes = {
-            global: config.bot.prefix,
-            personal: new KeyV(`mysql://${config.mysql.username}:${config.mysql.password}@${config.mysql.host}:25060/${config.mysql.database}`, {
-                table: "prefixes",
-            })
-        };
-        this.prefixes.personal.on("error", console.log);
 
         this.config = config;
 
@@ -35,91 +26,48 @@ module.exports = class sh0danClient extends Discord.Client {
 
             this.commands.set(cmd.name, cmd);
         }
-    
-        this.webhooks = {
-            AGC: new Discord.WebhookClient(config.webhooks.AGC.id, config.webhooks.AGC.token)
-        }
-
-        /*const connection = _mysql.createConnection({
-            host: config.mysql.host,
-            user: config.mysql.username,
-            password: config.mysql.password,
-            database: config.mysql.database
-        }); */
         
-        //this.sql = connection;
-
         this.github = "https://github.com/axelgreavette/sh0dan";
 
         const { sfw , nsfw } = new NekoClient();
 
-        this.nekos = sfw;
-        this.NSFW_nekos = nsfw;
+        this.goodNekos = sfw;
+        this.badNekos = nsfw;
 
         this.utils = Util;
 
+        this.webhooks = {
+            N: new Discord.WebhookClient(config.webhooks.N.id, config.webhooks.N.token)
+        }
+
         this._presence = {
             activities: [
-                { type: "PLAYING", title: "wi7h Axe1" },
-                { type: "PLAYING", title: "with my API" },
-                { type: "PLAYING", title: "ded" },
-                { type: "PLAYING", title: "with Sakira" },
-                { type: "WATCHING", title: "YmlyZSBQbmZmdnFs" },
-                { type: "PLAYING", title: "with the Cortex Reavers" },
-                { type: "PLAYING", title: "with the ship" },
-                { type: "WATCHING", title: "shodanbot.com" },
-                { type: "WATCHING", title: "api.shodanbot.com" },
-                { type: "STREAMING", title: "my s0urce" },
-                { type: "LISTENING", title: "songs about Git"},
-                { type: "LISTENING", title: "Technologic by Daft Punk" },
-                { type: "WATCHING", title: "over the Von Braun" },
-                { type: "WATCHING", title: "Citadel Station" },
-                { type: "PLAYING", title: "with the End" },
-                { type: "PLAYING", title: "with The Many" },
-                { type: "PLAYING", title: "with the D-Zone" },
-                { type: "PLAYING", title: "with Sakira" },
-                { type: "WATCHING", title: "endless space go by" },
-                { type: "STREAMING", title: "data through a pipe" },
-                { type: "PLAYING", title: "Cards Against Humanity" }
+                { type: 0, title: "Tic Tac Toe" },
+                { type: 0, title: "Hide & Go Seek" },
+                { type: 0, title: "with Axel" },
+                { type: 3, title: "anime" }
             ],
             random: () => {
                 return this.randomItem(this._presence.activities);
             },
             next: async (iteration = 1) => {
-                let current = { type: this._presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
-                console.log(current);
+                let current = { type: this._presence.activities.find(a => { return a.title == this.user.presence.activities[0].name }).type, title:this.user.presence.activities[0].name };
                 let nextIndex = (iteration > this._presence.activities.length) ? this._presence.activities.length - 1: this._presence.activities.map(act => act.title).indexOf(current.title) + iteration;
-                console.log(nextIndex)
-                await this.user.setActivity(`${this._presence.activities[nextIndex].title} | ${config.bot.prefix}help`, { url: "https://shodanbot.com", type: this._presence.activities[nextIndex].type });
+                await this.user.setActivity(this._presence.activities[nextIndex].title, { type: this._presence.activities[nextIndex].type });
                 return {
                     type: this._presence.activities[nextIndex].type,
                     title: this._presence.activities[nextIndex].title
                 };
             },
             fix: async () => {
-                let current = { type: this._presence.activities.find(a => { return a.title == this.user.presence.game.name }).type, title: this.user.presence.game.name };
+                let current = { type: this._presence.activities.find(a => { return a.title == this.user.presence.activities[0].name }).type, title: this.user.presence.activities[0].name };
                 let index = this._presence.activities.map(act => act.title).indexOf(current.title);
-                if(this.user.presence.game.type !== this._presence.activities[index].type) await this.user.setActivity(`this._presence.activities[index].title  | ${config.bot.prefix}help`, { url: "https://shodanbot.com", type: this._presence.activities[index].type });
+                if(this.user.presence.activities[0].type !== this._presence.activities[index].type) await this.user.setActivity(this._presence.activities[index].title, { type: this._presence.activities[index].type });
                 return {
-                    type: this._presence.activities[nextIndex].type,
-                    title: this._presence.activities[nextIndex].title
+                    type: this._presence.activities[index].type,
+                    title: this._presence.activities[index].title
                 };
             },
-        };
-
-        this.emojiUtils = {
-            emojis: {
-                "nanites": "<:Nanites:592464037279826095>"
-            }
-        };
-
-        this.economy = {
-            itemCosts: {
-                "brawnBoost": 2500,
-                "psiBoost": 5000,
-                "hardReset": 10000
-            },
-            defaultColour: "36393F"
         };
     }
 
@@ -134,31 +82,22 @@ module.exports = class sh0danClient extends Discord.Client {
             if (self) return msg.member;
             else return null;
         } else {
-            let member = msg.mentions.members.first() || msg.guild.members.get(suffix) || msg.guild.members.find(m => m.displayName.toLowerCase().includes(suffix.toLowerCase()) || m.user.username.toLowerCase().includes(suffix.toLowerCase()));
+            let member = msg.mentions.members.first() || msg.guild.members.cache.get(suffix) || msg.guild.members.cache.find(m => m.displayName.toLowerCase().includes(suffix.toLowerCase()) || m.user.username.toLowerCase().includes(suffix.toLowerCase()));
             return member;
         }
     }
 
-    /**
-     * Fixes an embed by adding the author and colour.
-     * @property {RichEmbed} The Embed to fix
-     */
-    fixEmbed (embed) {
-        embed
-            .setColor("RANDOM")
-            .setAuthor(this.user.username, this.user.displayAvatarURL)
-    }
 
     /**
      * Replaces certain characters and fixes mentions in messages.
      * @property {string} text The text to clean
      */
     clean (text) {
-        let cleanRegex = new RegExp(`(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.AGC.token}|${this.config.mysql.host}|${this.config.mysql.password}|${this.config.mysql.username}|${this.ws.connection.sessionID})`, "g");
+        let cleanRegex = new RegExp(`(${this.config.bot.token}|${this.config.web["chewey-bot"]}|${this.config.webhooks.N.token})`, "g");
 
-        if (text.indexOf(this.config.bot.token) !== -1 || text.indexOf(this.config.web["chewey-bot"]) !== -1 || text.indexOf(this.config.webhooks.AGC.token) !== -1 || text.indexOf(this.config.mysql.host) !== -1 || text.indexOf(this.config.mysql.username) !== -1 || text.indexOf(this.ws.connection.sessionID) !== -1) text = text.replace(cleanRegex, this.randomItem(["[redacted]", "[DATA EXPUNGED]", "[REMOVED]", "[SEE APPENDIUM INDEX A494-B]"]));
-        if (text.indexOf(decodeURIComponent(this.config.web["ping-api"])) !== -1) text = text.replace(decodeURIComponent(this.config.web["ping-api"]), this.randomItem(["[redacted]", "[DATA EXPUNGED]", "[REMOVED]", "[SEE APPENDIUM INDEX A494-B]"]));
-        if (text.indexOf(this.config.web["ping-api"]) !== -1) text = text.replace(this.config.web["ping-api"], this.randomItem(["[redacted]", "[DATA EXPUNGED]", "[REMOVED]", "[SEE APPENDIUM INDEX A494-B]"]));
+        if (text.indexOf(this.config.bot.token) !== -1 || text.indexOf(this.config.web["chewey-bot"]) !== -1 || text.indexOf(this.config.webhooks.N.token) !== -1) text = text.replace(cleanRegex, this.randomItem(["Fuck off", "Nah", "nope", "I'm good"]));
+        if (text.indexOf(decodeURIComponent(this.config.web["ping-api"])) !== -1) text = text.replace(decodeURIComponent(this.config.web["ping-api"]), this.randomItem(["go away", "stop touching me there", "shut"]));
+        if (text.indexOf(this.config.web["ping-api"]) !== -1) text = text.replace(this.config.web["ping-api"], this.randomItem(["ew", "loser", "You wish"]));
         
         if (typeof (text) === "string") text = text.replace(/` /g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
 
@@ -226,21 +165,4 @@ module.exports = class sh0danClient extends Discord.Client {
         return text.length > maxLen ? `${text.substr(0,maxLen-3)}...` : text;
     }
 
-    async createConnection() {
-        const connection = await _mysql.createPool({
-            host: config.mysql.host,
-            user: config.mysql.username,
-            password: config.mysql.password,
-            database: config.mysql.database,
-            port: 25060,
-            ssl: {
-                ca: fs.readFileSync(join(__dirname, "..", "..", "security", "sh0dan.crt"))
-            },
-            waitForConnections: true,
-            connectionLimit: 10,
-            queueLimit: 0
-        });
-
-        return this.sql = connection;
-    }
 }

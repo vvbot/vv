@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: "search",
@@ -9,7 +9,7 @@ module.exports = {
     args: true,
     usage: "",
     disabled: true,
-    async execute(message, args, client, logger) {
+    async execute(message, args, client) {
         let text;
 
         const res = await axios.get(`https://api.duckduckgo.com/?q=?${encodeURIComponent(args.join(" "))}&format=json&no_html=1`);
@@ -20,12 +20,11 @@ module.exports = {
         if(res.data.RelatedTopics[0].Text.length > res.data.Abstract.length) text = url.RelatedTopics[0].Text;
         else text = url.Abstract;
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setTitle(`Results for: ${res.data.Heading}`)
             .setDescription(text)
             .addField("Links:", res.RelatedTopics[0].FirstURL)
-
-        client.fixEmbed(embed);
+            .setColor(0xFF69B4)
 
         return message.channel.send(embed);
     }

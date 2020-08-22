@@ -5,7 +5,7 @@ module.exports = {
     args: false,
     usage: "",
     hidden: true,
-    execute(message, args, client, logger) {
+    execute(message, args, client) {
         return message.channel.send(`hewwo OwO`)
     }
 }

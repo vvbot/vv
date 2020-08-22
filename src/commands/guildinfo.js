@@ -1,4 +1,4 @@
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: "guildinfo",
@@ -6,15 +6,16 @@ module.exports = {
     args: false,
     usage: "",
     guildOnly: true,
-    execute(message, args, client, logger) {
-        const embed = new RichEmbed()
+    execute(message, args, client) {
+        const embed = new MessageEmbed()
             .setTitle(`Information for ${message.guild.name}`)
             .setThumbnail(message.guild.iconURL)
             .addField("ID:", message.guild.id, true)
             .addField("Size:", message.guild.memberCount, true)
             .addField("Region:", message.guild.region.charAt(0).toUpperCase() + message.guild.region.slice(1), true)
             .addField("Owner:", `${message.guild.owner} (${message.guild.ownerID})`, true)
-        client.fixEmbed(embed);
+            .setColor(0xFF69B4);
+            
         return message.channel.send(embed);
     }
 }

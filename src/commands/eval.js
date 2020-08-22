@@ -5,10 +5,10 @@ module.exports = {
     usage: "[CODE]",
     adminOnly: true,
     preventDefaultError: true,
-    async execute(message, args, client, logger, Discord) {
+    async execute(message, args, client) {
         try {
             const code = args.join(" ");
-            let evaled = await eval(code);
+            let evaled = await eval("(async () => { return " + code + "})()");
 
             if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
             

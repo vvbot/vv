@@ -3,8 +3,8 @@ module.exports = {
     description: "Owoifys input",
     args: true,
     usage: "[TEXT]",
-    async execute(message, args, client, logger) {
-        let { owo } = await client.nekos.OwOify({ text: args.join(" ") });
+    async execute(message, args, client) {
+        let { owo } = await client.goodNekos.OwOify({ text: args.join(" ") });
         return message.channel.send(owo);
     }
 }

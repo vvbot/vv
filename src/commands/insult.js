@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { RichEmbed } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: "insult",
@@ -7,13 +7,13 @@ module.exports = {
     args: true,
     usage: "[USER]",
     guildOnly: false,
-    async execute(message, args, client, logger) {
+    async execute(message, args, client) {
         const insultee = client.findMember(message, args[0], false);
         const result = await axios.get("https://insult.mattbas.org/api/insult.json")
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setTitle("It\'s getting rough in here!")
             .setDescription(`${insultee.displayName}, ${result.data.insult.charAt(0).toLowerCase() + result.data.insult.slice(1)}`)
-        client.fixEmbed(embed);
+            .fix(embed);
         message.channel.send(embed);
     }
 }

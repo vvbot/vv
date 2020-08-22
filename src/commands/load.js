@@ -6,7 +6,7 @@ module.exports = {
     args: true,
     usage: "",
     adminOnly: true,
-    execute(message, args, client, logger) {
+    execute(message, args, client) {
         let cmd;
         if(client.commands.get(args[0])) return message.channel.send("That command has already been loaded.");
         if(message.content.endsWith(".js")) cmd = require(join(client.commandsFolder, `${args[0]}`));

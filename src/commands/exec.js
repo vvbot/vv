@@ -7,7 +7,7 @@ module.exports = {
     usage: "[COMMAND]",
     adminOnly: true,
     preventDefaultError: true,
-    execute(message, args, client, logger) {
+    execute(message, args, client) {
         try {
             const cmd = args.join(" ");
             exec(`${cmd}`, (error, stdout, stderr) => {

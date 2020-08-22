@@ -1,5 +1,4 @@
-const { RichEmbed } = require("discord.js");
-const axios = require("axios");
+const { MessageEmbed } = require("discord.js");const axios = require("axios");
 
 module.exports = {
     name: "ow",
@@ -8,7 +7,7 @@ module.exports = {
     args: true,
     usage: "[PC|XBL|PSN] [NA|EU|KR] [BATTLE TAG]",
     guildOnly: false,
-    async execute(message, args, client, logger) {
+    async execute(message, args, client) {
         if(!args.length) return;
         if (!["pc", "xbl", "psn"].includes(args[0].toLowerCase())) return message.reply("please choose a valid platform! `PC`, `XBL`, and `PSN` are currently accepted.");
         if (!["na", "eu", "kr"].includes(args[1].toLowerCase())) return message.reply("please choose a valid region! `NA`, `EU`, and `KR` are currently accepted.");
@@ -19,7 +18,7 @@ module.exports = {
 
         if(ow.data.error) return message.channel.send("That player could not be found.");
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setTitle(`Profile for ${ow.data.name}`)
             .setThumbnail(ow.data.ratingIcon ? ow.data.ratingIcon : ow.data.icon)
             .addField("Level:", ow.data.level, true)
@@ -30,7 +29,7 @@ module.exports = {
             .addField("Silver Medals Won:", ow.data.quickPlayStats.awards ? ow.data.quickPlayStats.awards.medalsSilver : "No Silver Medals won", true)
             .addField("Gold Medals Won:", ow.data.quickPlayStats.awards ? ow.data.quickPlayStats.awards.medalsGold : "No Gold Medals won", true)
 
-        client.fixEmbed(embed);
+         .setColor(0xFF69B4);
         message.channel.send(embed);
     }
 }
