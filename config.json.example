@@ -3,20 +3,17 @@
         "token": "token",
         "admins": [
             "228872946557386752",
-            "365955998122508300"
         ],
-        "prefix": "s$",
+        "prefix": ">",
         "debug_mode": false,
         "log_file_name": "log.txt"
     },
     "web": {
         "chewey-bot": "chewey-bot api token",
-        "express-port": "8089",
-        "ping-api": "",
-        "domain-api-key": ""
+        "nasa": "nasa api key"
     },
     "webhooks": {
-        "AGC": {
+        "N": {
             "id": "webhook-id",
             "token": "webhook-token"
         }
