@@ -2,20 +2,20 @@ const { Command } = require("discord-akairo");
 const { MessageEmbed } = require("discord.js");
 const { get } = require("axios");
 
-module.exports = class DogCommand extends Command {
+module.exports = class BirdCommand extends Command {
     constructor() {
-        super("dog", {
-            aliases: ["dog", "dawg"],
-            description: "Gives you a picture of a dog.",
+        super("bird", {
+            aliases: ["bird", "birb"],
+            description: "Gives you a picture of a beautiful bird of paradise.",
             typing: true
         });
     }
 
     async exec(msg) {
-        let { data: dog} = await get("https://api.chewey-bot.top/dog", { headers: { "Authorization": this.client.config.chewey_bot }});
+        let { data: birb} = await get("https://api.chewey-bot.top/birb", { headers: { "Authorization": this.client.chewey_bot }});
 
         const embed = new MessageEmbed()
-            .setImage(dog.data)
+            .setImage(birb.data)
             .setFooter("Powered by api.chewey-bot.top")
             .setColor(this.client.color);
 

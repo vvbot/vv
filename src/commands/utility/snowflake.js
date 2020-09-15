@@ -1,10 +1,24 @@
-module.exports = {
-    name: "snowflake",
-    description: "Returns the timestamp of the given snowflake",
-    args: false,
-    usage: "[SNOWFLAKE]",
-    guildOnly: false,
-    execute(message, args, client) {
-        message.channel.send(new Date((args[0] * Math.pow(2, -22)) + 1420070400000).toUTCString())
+const { Command } = require("discord-akairo");
+const { SnowflakeUtil } = require("discord.js");
+
+module.exports = class SnowflakeCommand extends Command {
+    constructor() {
+        super("snowflake", {
+            aliases: ["snowflake"],
+            description: "Converts a snowflake to a human-readable timestamp.",
+            typing: true,
+            args: [
+                {
+                    id: "snowflake",
+                    type: "string"
+                }
+            ]
+        });
+    }
+
+    exec(msg, { snowflake }) {
+        let deconstructed = SnowflakeUtil.deconstruct(snowflake);
+        
+        return msg.util.send(new Date(deconstructed.date).toUTCString());
     }
 }

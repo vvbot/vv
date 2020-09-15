@@ -1,20 +1,29 @@
-const axios = require("axios");
-const { MessageEmbed } = require("discord.js")
+const { Command } = require("discord-akairo");
+const { MessageEmbed } = require("discord.js");
+const { get } = require("axios");
 
-module.exports = {
-    name: "apod",
-    description: "Returns the Astronomy Picture of the Day",
-    args: false,
-    usage: "",
-    async execute(message, args, client) {
-        const apod = await axios.get(`https://api.nasa.gov/planetary/apod?api_key=${client.config.web.nasa}`);
+const { shorten } = require("../../util/utils");
+
+module.exports = class APODCommand extends Command {
+    constructor() {
+        super("apod", {
+            aliases: ["apod"],
+            description: "Returns NASA's astronomy picture of the day.",
+            typing: true
+        });
+    }
+
+    async exec(msg) {
+        let apod = await get(`https://api.nasa.gov/planetary/apod?api_key=${this.client.config.nasa}`);
+
         const embed = new MessageEmbed()
             .setTitle(`Astronomy Picture of the Day: ${apod.data.title}`)
-            .setDescription(apod.data.explanation)
+            .setDescription(shorten(apod.data.explanation, 2000))
             .setImage(apod.data.hdurl)
             .setFooter(`Copyright ${apod.data.copyright}`)
             .setTimestamp(apod.data.date)
-            .setColor(0xFF69B4)
-        return message.channel.send(embed);
+            .setColor(this.client.color);
+
+        return msg.util.send(embed);
     }
 }

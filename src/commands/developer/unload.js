@@ -1,50 +1,53 @@
-const { performance } = require("perf_hooks");
+const { Command } = require("discord-akairo");
+const { list } = require("../../util/utils");
 
-module.exports = {
-    name: "unload",
-    description: "Unload a command from the bot process",
-    args: true,
-    usage: "<command|all>",
-    aliases: ["ul"],
-    adminOnly: true,
-    async execute(message, args, client) {
-        if(args[0].toLowerCase() == "all" || args[0].toLowerCase() == "a") {
-            let start = performance.now();
+module.exports = class UnloadCommand extends Command {
+    constructor() {
+        super("unload", {
+            aliases: ["unload", "ul"],
+            description: "Unload a command from the bot process.",
+            ownerOnly: true,
+            typing: true,
+            args: [
+                {
+                    id: "cmd",
+                    prompt: {
+                        star: "Please supply either a command to unload, or use the `a` or `all` arguments to unload all unnecessary commands."
+                    },
+                    type: "string"
+                }
+            ]
+        })
+    }
 
-            let commands = client.commands.filter(c => c.category != "developer");
-
-            let progress = await message.channel.send("Clearing `require` cache...");
-
-            client.commands.each(async c => {
+    exec(msg, { cmd }) {
+        if (cmd == "a" || cmd == "all") {
+            this.client.commandHandler.modules.forEach(c => {
                 if(c.category == "developer") return;
-
-                delete require.cache[require.resolve(`../${c.ABSOLUTE_PATH}`)];
+                else return this.client.commandHandler.deregister(c);
             });
-            
-            progress.edit("Cleared `require` cache.")
-            progress.edit("Sweeping commands...");
+            return msg.util.send("Unloaded all commands.");
+        } else if (/.*\/\*/.test(cmd) && (cmd != "a" || cmd != "all")) {
+            let cat = cmd.split("/")[0];
+            if(cat == "developer") return msg.util.send("That category cannot be unloaded.");
 
-            client.commands.sweep(c => c.category != "developer");
-            client.autoCommands.sweep(() => true);
-            client.autoPatterns = [];
+            let unregistered = [];
 
-            let stop = performance.now();
-            
-            return progress.edit(`Done. Unloaded ${commands.size} command${commands.size > 1 ? "s" : ""} in ${(stop - start).toFixed(2)} ms. It's recommended you run \`${client.prefix}rebuild_auto\` now.`);
-        } else {           
-            let command = client.commands.get(args[0]);
+            this.client.commandHandler.modules.filter(c => c.category == cat).forEach(m => {
+                unregistered.push(m.id);
+                return this.client.commandHandler.deregister(m);
+            });
 
-            if(command.auto) {
-                client.autoCommands.sweep(cmd => cmd.name == command.name);
-                client.autoPatterns = client.autoPatterns.filter(p => !command.patterns.includes(p));
-            }
+            return msg.util.send(`Unloaded the ${list(unregistered, "`")} command${unregistered.length > 1 ? "s" : ""} from the \`${cat}\` filter.`)
 
-            if (!command) return message.channel.send("That command couldn't be found within me.");
+        } else {
+            let c = this.client.commandHandler.findCommand(cmd);
 
-            client.commands.delete(command.name);
-            delete require.cache[require.resolve(`../${command.ABSOLUTE_PATH}`)];
+            if(!c) return msg.util.send("I couldn't find that command.");
+            if(c.category == "developer") return msg.util.send("I can't unload that command.");
 
-            return message.channel.send(`Successfully unloaded \`${command.name}\`. It's recommended you run \`${client.prefix}rebuild_auto\` now.`);
+            this.client.commandHandler.deregister(c);
+            return msg.util.send(`Unloaded the \`${c.id}\` ${(cmd != c.id) ? "(`" + cmd + "`) " : " "}command.`);
         }
     }
-};
+}

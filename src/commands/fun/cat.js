@@ -1,17 +1,24 @@
-const axios = require("axios");
+const { Command } = require("discord-akairo");
 const { MessageEmbed } = require("discord.js");
+const { get } = require("axios");
 
-module.exports = {
-    name: "cat",
-    description: "Gives cat",
-    usage: "",
-    async execute(message, args, client) {
-        const cat = await axios.get("https://api.chewey-bot.top/cat", { headers: { "Authorization": client.config.web["chewey-bot"] }});
+module.exports = class CatCommand extends Command {
+    constructor() {
+        super("cat", {
+            aliases: ["cat"],
+            description: "Gives you a picture of the best animal - a cat.",
+            typing: true
+        });
+    }
+
+    async exec(msg) {
+        let { data: cat} = await get("https://api.chewey-bot.top/cat", { headers: { "Authorization": this.client.config.chewey_bot }});
+
         const embed = new MessageEmbed()
-            .setTitle("Cat:")
-            .setImage(cat.data.data)
+            .setImage(cat.data)
             .setFooter("Powered by api.chewey-bot.top")
-            .setColor(0xFF69B4);
-        return message.channel.send(embed);
+            .setColor(this.client.color);
+
+        return msg.util.send(embed);
     }
 }

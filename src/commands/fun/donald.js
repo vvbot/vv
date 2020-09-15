@@ -1,17 +1,18 @@
-const axios = require("axios");
-const { MessageEmbed }= require("discord.js");
+const { Command } = require("discord-akairo");
+const { get } = require("axios");
 
-module.exports = {
-    name: "donald",
-    description: "Quotes from the one the only.",
-    args: false,
-    usage: "",
-    async execute(message, args, client) {
-        const trump = await axios.get("https://api.whatdoestrumpthink.com/api/v1/quotes/random");
-        const embed = new MessageEmbed()
-            .setTitle("Quotes from Trump:")
-            .setDescription(`${trump.data.message} \n - Donald Trump`)
-            .setColor(0xFF69B4);
-        return message.channel.send(embed);
+module.exports = class DonaldCommand extends Command {
+    constructor() {
+        super("donald", {
+            aliases: ["donald"],
+            description: "A random quote probably from Donald J. Trump.",
+            typing: true
+        });
+    }
+
+    async exec(msg) {
+        let { data: trump } = await get("https://api.whatdoestrumpthink.com/api/v1/quotes/random");
+
+        return msg.util.send(`> ${trump.message}\n- Donald Trump`);
     }
 }

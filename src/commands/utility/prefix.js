@@ -1,9 +1,20 @@
-module.exports = {
-    name: "prefix",
-    description: "Lists all function prefixes valid for interactions with me.",
-    args: false,
-    usage: "",
-    execute(message, args, client) {
-        message.channel.send(`Use me with a **${client.prefix}**`)
+const { Command } = require("discord-akairo");
+const { stripIndents } = require("common-tags");
+
+module.exports = class PrefixCommand extends Command {
+    constructor() {
+        super("prefix", {
+            aliases: ["prefix", "start", "get-started"],
+            description: "Lists my command prefixes.",
+            typing: true
+        });
+    }
+
+    exec(msg) {
+        return msg.util.send(stripIndents`
+            You can use my commands by either:
+              •  mentioning me with ${msg.guild.me}
+              •  using my default \`${this.client.prefix}\` prefix
+        `);
     }
 }

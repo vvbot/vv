@@ -1,16 +1,24 @@
-const axios = require("axios");
+const { Command } = require("discord-akairo");
 const { MessageEmbed } = require("discord.js");
-module.exports = {
-    name: "space",
-    description: "Gives space",
-    usage: "",
-    async execute(message, args, client) {
-        const space = await axios.get("https://api.chewey-bot.top/space", { headers: { "Authorization": client.config.web["chewey-bot"] }});
+const { get } = require("axios");
+
+module.exports = class SpaceCommand extends Command {
+    constructor() {
+        super("space", {
+            aliases: ["space"],
+            description: "Gives you a picture of a dog.",
+            typing: true
+        });
+    }
+
+    async exec(msg) {
+        let { data: space} = await get("https://api.chewey-bot.top/space", { headers: { "Authorization": this.client.configchewey_bot }});
+
         const embed = new MessageEmbed()
-            .setTitle("Space:")
-            .setImage(space.data.data)
+            .setImage(space.data)
             .setFooter("Powered by api.chewey-bot.top")
-         .setColor(0xFF69B4);
-        return message.channel.send(embed);
+            .setColor(this.client.color);
+
+        return msg.util.send(embed);
     }
 }

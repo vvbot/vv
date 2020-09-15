@@ -1,6 +1,8 @@
 const crypto = require("crypto");
 const { readdirSync, statSync } = require("fs");
+const { readdir, stat } = require("fs").promises;
 const { join } = require("path");
+const util = require("util");
 
 const yes = ["yes", "y", "ye", "yeah", "yup", "yea", "ya"];
 const no = ["no", "n", "nah", "nope", "nop"];
@@ -35,11 +37,12 @@ module.exports = class Utils {
     /**
      * Creates a single string worded like a list based off the given array.
      * @param {Array} arr Array
+     * @param {string} separator A character to surround each element with and separate them from other elements.
      * @param {string} conj Conjunction
      */
-    static list(arr, conj = "and") {
+    static list(arr, separator = "", conj = "and") {
         const len = arr.length;
-        return `${arr.slice(0, -1).join(", ")}${len > 1 ? `${len > 2 ? "," : ""} ${conj} ` : ""}${arr.slice(-1)}`;
+        return `${separator}${arr.slice(0, -1).join(`${separator}, ${separator}`)}${separator}${len > 1 ? `${len > 2 ? "," : ""} ${conj} ` : ""}${separator}${arr.slice(-1)}${separator}`;
     }
 
     /**
@@ -214,7 +217,7 @@ module.exports = class Utils {
      * Finds a member from a string, mention, or id
      * @property {string} msg The message to process
      * @property {string} suffix The username to search for
-     * @property {bool} self Whether or not to defualt to yourself if no results are returned. Defualts to false.
+     * @property {bool} self Whether or not to default to yourself if no results are returned. Defaults to false.
      */
     static findMember(msg, suffix, self = false) {
         if (!suffix) {
@@ -222,7 +225,10 @@ module.exports = class Utils {
             else return null;
         } else {
             let member = msg.mentions.members.first() || msg.guild.members.cache.get(suffix) || msg.guild.members.cache.find(m => m.displayName.toLowerCase().includes(suffix.toLowerCase()) || m.user.username.toLowerCase().includes(suffix.toLowerCase()));
-            return member;
+            
+            //If we can't find a member AND you actually want to find yourself...
+            if(!member && self) return msg.member;
+            else return member;
         }
     }
 
@@ -230,8 +236,59 @@ module.exports = class Utils {
      * Scrapes a supplied directory and returns recursive directories and files within.
      * @param {File Path} srcPath The directory to scrape.
      */
-    static getDirectories(srcPath) {
+    static getDirectoriesSync(srcPath) {
         return readdirSync(srcPath).filter(file => statSync(join(srcPath, file)).isDirectory());
     }
 
+    /**
+     * Asynchronously scrapes the supplied directory and recursively returns directories within.
+     * @param {string} srcPath The directory to scrape.
+     */
+    static async getDirectories(srcPath) {
+        let files = await readdir(srcPath);
+
+        return files.filter(async file => {
+            let s = await stat(join(srcPath, file));
+            s.isDirectory();
+        });
+    }
+
+    static disambiguation(items, label, property = 'name') {
+        const itemList = items.map(item => `"${(property ? item[property] : item).replace(/ /g, '\xa0')}"`).join(',   ');
+        return `Multiple ${label} found, please be more specific: ${itemList}`;
+    }
+
+    /**
+     * @param {any} data
+     * @param {number} [depth=0]
+     * @returns {Promise<string>}
+     * @author PapiOphidian
+     * Thanks Papi!
+     */
+    static async stringify(data, depth = 0) {
+        let result;
+        
+        if (data === undefined) result = "(undefined)"
+        else if (data === null) result = "(null)"
+        else if (typeof (data) == "function") result = "(function)"
+        else if (typeof (data) == "string") result = `"${data}"`
+        else if (typeof (data) == "number") result = data.toString()
+        else if (data instanceof Promise) return Utils.stringify(await data, depth)
+        else if (data.constructor && data.constructor.name && data.constructor.name.toLowerCase().includes("error")) {
+            const errorObject = {};
+
+            Object.entries(data).forEach(e => {
+                errorObject[e[0]] = e[1];
+            });
+
+            result = `\`\`\`\n${data.stack}\`\`\` ${await Utils.stringify(errorObject)}`;
+        } else result = `\`\`\`js\n${util.inspect(data, { depth: depth })}\`\`\``;
+
+        if (result.length >= 2000) {
+            if (result.startsWith("```")) result = `${result.slice(0, 1995).replace(/`+$/, "").replace(/\n\s+/ms, "")}…\`\`\``;
+		    else result = `${result.slice(0, 1998)}…`;
+        }
+        
+	    return result;
+    }
 }

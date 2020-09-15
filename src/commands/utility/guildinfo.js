@@ -1,21 +1,28 @@
+const { Command } = require("discord-akairo");
 const { MessageEmbed } = require("discord.js");
 
-module.exports = {
-    name: "guildinfo",
-    description: "Retrieves information about the current guild",
-    args: false,
-    usage: "",
-    guildOnly: true,
-    execute(message, args, client) {
+module.exports = class GuildInfoCommand extends Command {
+    constructor() {
+        super("guildinfo", {
+            aliases: ["guildinfo"],
+            description: "Fetches information about the current guild.",
+            channel: "guild",
+            typing: true
+        });
+    }
+
+    exec(msg) {
         const embed = new MessageEmbed()
-            .setTitle(`Information for ${message.guild.name}`)
-            .setThumbnail(message.guild.iconURL)
-            .addField("ID:", message.guild.id, true)
-            .addField("Size:", message.guild.memberCount, true)
-            .addField("Region:", message.guild.region.charAt(0).toUpperCase() + message.guild.region.slice(1), true)
-            .addField("Owner:", `${message.guild.owner} (${message.guild.ownerID})`, true)
-            .setColor(0xFF69B4);
+            .setTitle(`${msg.guild.name}`)
+            .setThumbnail(msg.guild.iconURL())
+            .addField("Member count:", msg.guild.memberCount, true)
+            .addField("Boost count:", `${msg.guild.premiumSubscriptionCount} (tier ${msg.guild.premiumTier})`, true)
+            .addField("Region:", msg.guild.region.charAt(0).toUpperCase() + msg.guild.region.slice(1), true)
+            .addField("Owner:", `${msg.guild.owner} (${msg.guild.ownerID})`)
+            .addField("Emojis:", msg.guild.emojis.cache.size <= 0 ? "This guild doesn't have any emojis." : msg.guild.emojis.cache.map(e => e.toString()).join(" "))
+            .setFooter(`Guild ID: ${msg.guild.id}${msg.guild.partnered ? ". This guild is a Discord Partner." : ""}${msg.guild.verified ? ". This Guild is Verified." : ""}`)
+            .setColor(this.client.color);
             
-        return message.channel.send(embed);
+        return msg.util.send(embed);
     }
 }

@@ -1,1 +1,0 @@
-Moderation commands for use by server moderators or administrators.

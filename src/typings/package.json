@@ -1,0 +1,10 @@
+{
+    "name": "typings",
+    "version": "1.0.0",
+    "description": "Typings for random things",
+    "main": "index.js",
+    "types": "./index.d.ts",
+    "scripts": {},
+    "author": "Axel Greavette",
+    "license": "UNLICENSED"   
+}

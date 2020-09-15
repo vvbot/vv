@@ -1,95 +1,63 @@
+const { Command } = require("discord-akairo");
 const { join } = require("path");
-const { readdirSync } = require("fs");
-const { performance } = require("perf_hooks");
+const { list } = require("../../util/utils");
 
-module.exports = {
-    name: "load",
-    description: "Load a command into the bot process",
-    usage: "<command|all>",
-    args: true,
-    aliases: ["l"],
-    adminOnly: true,
-    async execute(message, args, client) {
-        if(args[0].toLowerCase() == "all" || args[0].toLowerCase() == "a") {
-            let start = performance.now();
+module.exports = class LoadCommand extends Command {
+    constructor() {
+        super("load", {
+            aliases: ["load", "l"],
+            description: "Load a new command into the bot process.",
+            ownerOnly: true,
+            typing: true,
+            args: [
 
-            let progress = await message.channel.send("Scraping command directories...");
-
-            let Commands = [];
-            let newCommands = 0;
-
-            client.utils.getDirectories(join(__dirname, "..")).forEach(d => {
-                if (d == "disabled") return;
-                let commands = readdirSync(join(__dirname, "..", d)).filter(file => file.endsWith(".js")).map(path => `${d}/${path}`);
-                Commands = Commands.concat(...commands);
-                progress.edit(`Scraped ${commands.length} commands from directories. Loading them...`);
-            });
-
-            if(client.commands.size == Commands.size) {
-                progress.edit("There are no available commands to load. This probably means that all commands are already loaded, but it could also mean I broke.")
-            }
-
-            for (const File of Commands) {
-                const cmd = require(`../${File}`);
-                let category = File.split("/")[0];
-
-                if (cmd.auto && cmd.patterns) {
-                   cmd.patterns.forEach(p => {
-                        client.autoCommands.set(p, cmd);
-                        client.autoPatterns.push(p);
-                    });
-
-                    cmd.ABSOLUTE_PATH = File;
-                    cmd.category = category;
-                    client.commands.set(cmd.name, cmd);
+                {
+                    id: "cmd",
+                    prompt: {
+                        start: "Please supply either a command to load, or use the `a` or `all` arguments to load all unloaded commands."
+                    },
+                    type: "string"
                 }
+            ]
+        });
+    }
 
+    exec(msg, { cmd }) {
+        if(!/.*\/.*/.test(cmd) && (cmd != "a" || cmd != "all")) return msg.util.send(`That is not a valid command path. It should be formatted \`${this.client.prefix}load category/command\`.`)
 
-                cmd.ABSOLUTE_PATH = File;
-                cmd.category = category;
+        let [cat, c] = cmd.split("/");
 
-                if (cmd.category == "developer" && !cmd.adminOnly) cmd.adminOnly = true;
+        if (cmd == "a" || cmd == "all") {
+            this.client.commandHandler.modules.forEach(c => {
+                return this.client.commandHandler.deregister(c);
+            });           
+            this.client.commandHandler.loadAll();
+            return msg.util.send("Loaded all unloaded commands.");
+        } else if(c && c == "*") {
+            let loaded = this.client.commandHandler.modules.filter(m => m.category == cat).map(m => m.id);
+            this.client.commandHandler.modules.filter(m => m.category == cat).forEach(m => this.client.commandHandler.deregister(m));
 
-                client.commands.set(cmd.name, cmd);
-                newCommands++;
+            this.client.commandHandler.loadAll(join(__dirname, "..", cat));
+            let newlyLoaded = this.client.commandHandler.modules.filter(m => m.category == cat && !loaded.includes(m.id)).map(m => m.id);
+
+            let message = "Loaded ";
+            if(newlyLoaded.length === 0) message += "no new commands.";
+            if(newlyLoaded.length === 1) message += `the \`${newlyLoaded[0]}\` command from the \`${cat}\` directory.`;
+            if(newlyLoaded.length > 1) {
+                message += `the ${list(newlyLoaded, "`")} commands from the \`${cat}\` directory.`;
             }
 
-            let stop = performance.now();
-
-            return progress.edit(`Done. Loaded ${newCommands} new command${newCommands > 1 ? "s" : ""} in ${(stop - start).toFixed(2)} ms. It's recommended to run \`${client.prefix}rebuild_auto\` now.`);
-
+            return msg.util.send(message);
         } else {
-            let Commands = [];
+            try {
+                let co = this.client.commandHandler.load(join(__dirname, "..", cat, `${c}.js`));
 
-            if(client.commands.get(args[0])) return message.channel.send("That command has already been loaded.");
-
-            client.utils.getDirectories(join(__dirname, "..")).forEach(d => {
-                let commands = readdirSync(join(__dirname, "..", d)).filter(file => file.endsWith(".js")).map(path => `${d}/${path}`);
-                Commands = Commands.concat(...commands);
-            });
-
-            let [path] = Commands.filter(c => c.endsWith(`/${args[0]}.js`));
-            delete require.cache[require.resolve(`../${path}`)];
-            
-            let cmd = require(`../${path}`);
-            let category = path.split("/")[0];
-
-            if(cmd.auto && cmd.patterns) {
-                cmd.patterns.forEach(p => {
-                    client.autoCommands.set(p, cmd);
-                    client.autoPatterns.push(p);
-
-                    cmd.ABSOLUTE_PATH = File;
-                    cmd.category = category;
-                    client.commands.set(cmd.name, cmd);
-                });
+                if(!co) return msg.util.send("I couldn't find that command.");
+                return msg.util.send(`Loaded the \`${co.id}\` command.`);
+            } catch(e) {
+                if(this.client.debug) this.client.logger.error(e);
+                if(e) return msg.util.send(`I encountered the following error when trying to load the \`${cmd}\` command: \n\n\`\`\`${e}\`\`\``);
             }
-
-            cmd.ABSOLUTE_PATH = path;
-            cmd.category = category;
-            client.commands.set(cmd.name, cmd);
-
-            return message.channel.send(`Successfully loaded \`${cmd.name}\`. It's recommended to run \`${client.prefix}rebuild_auto\` now.`);
         }
     }
-};
+}

@@ -1,11 +1,17 @@
-module.exports = {
-    name: "guildemojis",
-    description: "Lists all emojis that can be found in the current server",
-    args: false,
-    usage: "",
-    guildOnly: true,
-    execute(message, args, client) {
-        if(message.guild.emojis.cache.size <= 0) return message.channel.send("Yeah, this guild doesn't have any emojis... Sucks to suck.")
-        return message.channel.send(message.guild.emojis.cache.map(e => e.toString()).join(" "));
+const { Command } = require("discord-akairo");
+
+module.exports = class GuildEmojisCommand extends Command {
+    constructor() {
+        super("guildemojis", {
+            aliases: ["guildemojis"],
+            description: "Returns all of the current guild's emojis.",
+            channel: "guild",
+            typing: true,
+        });
+    }
+
+    exec(msg) {
+        if (msg.guild.emojis.cache.size <= 0) return msg.util.send("Yeah, this guild doesn't have any emojis... Sucks to suck.")
+        return msg.util.send(msg.guild.emojis.cache.map(e => e.toString()).join(" "));
     }
 }

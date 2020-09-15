@@ -1,20 +1,30 @@
+const { Command } = require("discord-akairo");
+const { trimArray } = require("../../util/utils");
 const { stripIndents } = require("common-tags");
 
-module.exports = {
-    name: "discriminator",
-    aliases: ["discrim", "search-discrim", "search-discriminator"],
-    description: "Searches for other users with your desired discriminator",
-    async execute(message, args, client, Discord) {
-        const discrim = args.length !== 0 ? args.join(" ") : message.author.discriminator;
-        
+module.exports = class DiscriminatorCommand extends Command {
+    constructor() {
+        super("discriminator", {
+            aliases: ["discriminator", "discrim", "search-discrim", "search-discriminator"],
+            description: "Searches the current guild for users with the given discriminator.",
+            typing: true,
+            args: [
+                {
+                    id: "discrim",
+                    type: "string",
+                    match: "content",
+                    default: msg => msg.author.discriminator
+                }
+            ]
+        });
+    }
+    exec(msg, { discrim }) {
         if (!/^[0-9]+$/.test(discrim) && !discrim.length === 4) {
-            return message.channel.send("Discriminator was invalid.");
+            return msg.util.send("An invalid discriminator was given.");
         }
-        
-        const users = client.users.filter(user => user.discriminator === discrim).map(user => user.username + " (" + user.id + ")")
-        return message.channel.send(stripIndents `
-			I found **${users.length}** ${(users.length === 1) ? "user"  : "users"} with the discriminator **#${discrim}**:
-			${client.utils.trimArray(users, 50).join(", ")}
+
+        let users = msg.guild.members.cache.filter(member => member.user.discriminator === discrim).map(user => "  •  " + user.user.username + "#" + user.user.discriminator + " (" + user.id + ")")
+        return msg.util.send(`I found **${users.length}** ${(users.length === 1) ? "user"  : "users"} with the discriminator **#${discrim}**: \n${trimArray(users, 50).join("\n")}
 		`)
     }
 }
