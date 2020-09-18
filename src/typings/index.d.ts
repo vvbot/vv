@@ -1,60 +1,72 @@
 import signale from "signale";
 import { WebhookClient } from "discord.js";
-import { CommandHandler, ListenerHandler, InhibitorHandler } from "discord-akairo";
-const { Command } = require("discord-akairo");
+import { CommandHandler, ListenerHandler, InhibitorHandler, AkairoClient } from "discord-akairo";
 
-export class VVClient {
-    config: ConfigObject;
-    prefix: string;
-    version: string;
-    presenceDelay: number;
-    github: string;
-
-    oldColor: Color;
-    color: Color; 
-
-    fakeToken: string;
-
-    commandsExecuted: number;
-    messagesSeen: number;
-
-    debug: boolean;
-
-    logger = signale;
-
-    webhooks = {
-        N: WebhookClient
+export class VVClient extends AkairoClient {
+    public config: ConfigObject;
+    public prefix: string;
+    public version: string;
+    public presenceDelay: number;
+    
+    public urls: {
+        server: string,
+        info: string,
+        me: string,
     }
 
-    commandHandler: CommandHandler;
-    listenerHandler: ListenerHandler;
-    inhibitorHandler: InhibitorHandler;
+    public oldColor: Color;
+    public color: Color;
 
-    init(token: string):null
+    public fakeToken: string;
+
+    public commandsExecuted: number;
+    public messagesSeen: number;
+
+    public debug: boolean;
+
+    public logger = signale;
+
+    public webhooks = {
+        N: WebhookClient,
+        V: WebhookClient
+    };
+
+    public commandHandler: CommandHandler;
+    public listenerHandler: ListenerHandler;
+    public inhibitorHandler: InhibitorHandler;
+
+    public init(token: string): null;
 }
 
 export interface ConfigObject {
     // Bot related
-    token: string;
-    admins: Array[string];
-    prefix: string;
-    debug_mode: boolean;
+    public token: string;
+    public admins: Array[string];
+    public prefix: string;
+    public debug_mode: boolean;
 
     // Web related
-    chewey_bot: string;
-    nasa: string;
+    public chewey_bot: string;
+    public nasa: string;
 
-    //Webhooks
-    webhooks: {
+    // Webhooks
+    public webhooks: {
         N: {
+            id: string,
+            token: string
+        },
+        V: {
             id: string,
             token: string
         }
     }
 }
 
-export class Command extends Command {
-    client: VVClient;
+export interface CreditObject {
+    public name: string;
+    public url: string;
+    public reason: string;
 }
 
-type Color =0xFF69B4 | 0xf6ad46;
+type Color = 0xFF69B4|0xf6ad46;
+

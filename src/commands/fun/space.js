@@ -12,7 +12,7 @@ module.exports = class SpaceCommand extends Command {
     }
 
     async exec(msg) {
-        let { data: space} = await get("https://api.chewey-bot.top/space", { headers: { "Authorization": this.client.configchewey_bot }});
+        let { data: space} = await get("https://api.chewey-bot.top/space", { headers: { "Authorization": this.client.config.chewey_bot }});
 
         const embed = new MessageEmbed()
             .setImage(space.data)

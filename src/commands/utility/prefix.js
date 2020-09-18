@@ -1,5 +1,4 @@
 const { Command } = require("discord-akairo");
-const { stripIndents } = require("common-tags");
 
 module.exports = class PrefixCommand extends Command {
     constructor() {
@@ -11,10 +10,6 @@ module.exports = class PrefixCommand extends Command {
     }
 
     exec(msg) {
-        return msg.util.send(stripIndents`
-            You can use my commands by either:
-              •  mentioning me with ${msg.guild.me}
-              •  using my default \`${this.client.prefix}\` prefix
-        `);
+        return msg.util.send(`You can use my commands by either:\n  •  mentioning me with ${msg.guild.me}\n  •  using my default \`${this.client.prefix}\` prefix`);
     }
 }

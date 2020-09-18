@@ -1,15 +1,12 @@
 const { AkairoClient, CommandHandler, ListenerHandler, InhibitorHandler } = require("discord-akairo");
 const { WebhookClient } = require("discord.js");
 const { join  } = require("path");
-const {  createHash } = require("crypto");
+const { createHash } = require("crypto");
 const signale = require("signale");
 
 const config = require("../../config.js");
-const utils = require("../util/utils");
 const { version } = require("../../package.json");
-const { VVClient } = require("../typings");
 
-/**@type {VVClient} */
 module.exports = class VVClient extends AkairoClient {
     constructor() {
         super({
@@ -23,10 +20,15 @@ module.exports = class VVClient extends AkairoClient {
         this.prefix = this.config.prefix;
         this.version = version;
         this.presenceDelay = 300000;
-        this.github = "https://github.com/axelgreavette/vv";
+
+        this.urls = {
+            server: "https://discord.gg/cYxEDNN",
+            info: "https://github.com/axelgreavette/vv",
+            me: "https://discord.com/api/oauth2/authorize?client_id=378909180666314754&permissions=388160&scope=bot"
+        }
 
         this.oldColor = 0xFF69B4; // Hot Pink for archival purposes.
-        this.color = 0xf6ad46;    // Burnt orange used in avatar.
+        this.color = 0xf6ad46;    // Burnt Orange colour used in avatar.
 
         this.fakeToken = createHash("md5").update("https://www.youtube.com/watch?v=dQw4w9WgXcQ").digest("hex"); // hehe
 
@@ -37,7 +39,8 @@ module.exports = class VVClient extends AkairoClient {
         this.logger = signale;
 
         this.webhooks = {
-            N: new WebhookClient(this.config.webhooks.N.id, this.config.webhooks.N.token)
+            N: new WebhookClient(this.config.webhooks.N.id, this.config.webhooks.N.token),
+            V: new WebhookClient(this.config.webhooks.V.id, this.config.webhooks.V.token)
         }
 
         /** Create handlers for Commands, Listeners (events), and inhibitors */

@@ -12,7 +12,7 @@ module.exports = class BirdCommand extends Command {
     }
 
     async exec(msg) {
-        let { data: birb} = await get("https://api.chewey-bot.top/birb", { headers: { "Authorization": this.client.chewey_bot }});
+        let { data: birb} = await get("https://api.chewey-bot.top/birb", { headers: { "Authorization": this.client.config.chewey_bot }});
 
         const embed = new MessageEmbed()
             .setImage(birb.data)

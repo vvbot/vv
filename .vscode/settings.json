@@ -3,7 +3,10 @@
         "Akairo",
         "Axel's",
         "Webhook",
+        "bufferutil",
         "cmds",
+        "erlpack",
+        "reactionmenu",
         "signale",
         "webhooks"
     ]

@@ -70,7 +70,7 @@ module.exports = class HelpCommand extends Command {
         } else if (cmd == "all" || cmd == "a") {
             const embed = new MessageEmbed()
                 .setTitle("Listing all available commands:")
-                .setColor(0xFF69B4)
+                .setColor(this.client.color)
                 .setDescription(`${this.client.commandHandler.modules.filter(c => {
                     if ((!c.disabled || !c.hidden) && !this.client.isOwner(msg.author)) return true;
                     else return true;
@@ -80,7 +80,7 @@ module.exports = class HelpCommand extends Command {
         } else if (cmd == "args" || cmd == "arguments") {
             const embed = new MessageEmbed()
                 .setTitle("Help with arguments:")
-                .setColor(0xFF69B4)
+                .setColor(this.client.color)
                 .setDescription(`Some of VV's commands use these things called arguments. Arguments are the words or symbols that come after a command, and are sometimes used to provide extra options for commands, or user input.\n\nIn the help panel, a command's arguments are explained in the **Usage** section. Usually it looks something like this: \n\nUsage: ${this.client.prefix}xkcd [issue]\n\nThe argument for this command is \`issue\`. We know this because it's surrounded by brackets. But notice how those brackets are square and aren't pointy? That means it's optional. In the case of the \`${this.client.prefix}discriminator\` command, if the arguments aren't supplied VV defaults to using the author's discriminator. \n\nThat's it! You now know everything there is to know about VV's command arguments! Have fun!`);
 
             return msg.util.send(embed);

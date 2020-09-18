@@ -1,27 +1,32 @@
 {
-  "name": "VV",
-  "version": "2.0.0",
+  "name": "vv",
+  "version": "1.0.0",
   "description": "A Discord bot that you DO NOT want to mess with.",
   "main": "src/VV.js",
   "scripts": {
     "start": "node .",
     "debug": "node . --debug"
   },
+  "engines": {
+    "node": "12.0.0",
+    "npm": "6.9.0"
+  },
   "author": "Axel Greavette",
+  "private": true,
   "license": "MIT",
   "dependencies": {
+    "@amanda/reactionmenu": "github:AmandaDiscord/ReactionMenu#735ae949430c9c33260ceca894023551afbda483",
     "axios": "^0.19.0",
-    "body-parser": "^1.19.0",
-    "canvas": "^2.6.1",
-    "chalk": "^2.4.2",
+    "bufferutil": "^4.0.1",
     "common-tags": "^1.8.0",
     "discord-akairo": "^8.1.0",
     "discord.js": "^12.0.2",
+    "erlpack": "github:discord/erlpack",
     "heapdump": "^0.3.15",
-    "js-beautify": "^1.10.2",
     "moment": "^2.24.0",
-    "nekos.life": "^2.0.4",
     "signale": "^1.4.0",
-    "winston": "^3.2.1"
+    "utf-8-validate": "^5.0.2",
+    "winston": "^3.2.1",
+    "zlib-sync": "^0.1.7"
   }
 }

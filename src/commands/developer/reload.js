@@ -11,7 +11,7 @@ module.exports = class ReloadCommand extends Command {
                 {
                     id: "cmd",
                     prompt: {
-                        start: "Please supply either a command to reload, or use the `a` or `all` arguments to reload all commands."
+                        start: "Please supply either a command/listener/inhibitor to reload, or use the `a` or `all` arguments to reload all commands."
                     },
                     type: "string"
                 }

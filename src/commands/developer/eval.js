@@ -1,4 +1,5 @@
 const { Command } = require("discord-akairo");
+const ReactionMenu = require("@amanda/reactionmenu");
 
 const { token, chewey_bot, nasa, webhooks} = require("../../../config.js");
 const { stringify } = require("../../util/utils");
@@ -53,6 +54,8 @@ module.exports = class EvalCommand extends Command {
             output = output.replace(new RegExp(item, "g"), this.client.fakeToken)
         }
 
-        return await msg.util.send(output)
+        let nmsg = await msg.util.send(output)
+        const menu = new ReactionMenu(nmsg, [{ emoji: "🗑", allowedUsers: [msg.author.id], remove: "message" }]);
+		return setTimeout(() => menu.destroy(true), 5 * 60 * 1000);
     }
 }

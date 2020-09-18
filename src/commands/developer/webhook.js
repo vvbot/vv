@@ -8,17 +8,26 @@ module.exports = class WebhookCommand extends Command {
             ownerOnly: true,
             args: [
                 {
+                    id: "hook",
+                    prompt: {
+                        start: "Which hook should I use?"
+                    },
+                    type: "string",
+                },
+                {
                     id: "text",
                     prompt: {
                         start: "What should I send?"
                     },
-                    type: "string"
+                    type: "string",
+                    match: "restContent"
                 }
             ]
         });
     }
 
-    exec(msg, args) {
-        return this.client.webhooks.N.send(args.text);
+    exec(msg, { hook, text }) {
+        this.client.webhooks[hook.replace("--", "").toUpperCase()].send(text);
+        return msg.util.send("Success.");
     }
 }
