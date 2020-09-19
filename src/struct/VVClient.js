@@ -23,7 +23,7 @@ module.exports = class VVClient extends AkairoClient {
 
         this.urls = {
             server: "https://discord.gg/cYxEDNN",
-            info: "https://github.com/axelgreavette/vv",
+            info: "https://github.com/vvbot/vv",
             me: "https://discord.com/api/oauth2/authorize?client_id=378909180666314754&permissions=388160&scope=bot"
         }
 
