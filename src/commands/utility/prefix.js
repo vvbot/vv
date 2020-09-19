@@ -10,6 +10,6 @@ module.exports = class PrefixCommand extends Command {
     }
 
     exec(msg) {
-        return msg.util.send(`You can use my commands by either:\n  •  mentioning me with ${msg.guild.me}\n  •  using my default \`${this.client.prefix}\` prefix`);
+        return msg.util.send(`You can use my commands by either:\n  •  using my default \`${this.client.prefix}\` prefix\n  •  mentioning me with ${msg.guild.me}`);
     }
 }

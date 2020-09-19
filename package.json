@@ -12,6 +12,10 @@
     "npm": "6.9.0"
   },
   "author": "Axel Greavette",
+  "homepage": "https://vv.axelg.xyz",
+  "repository": {
+    "url": "https://github.com/vvbot/vv"
+  },
   "private": true,
   "license": "MIT",
   "dependencies": {
