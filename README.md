@@ -7,7 +7,7 @@ VV is a feature-complete Discord bot with an attitude. She's updated weekly and 
 ## Available Commands:
 
 
-Total: 24
+Total: 26
 
 ### Developer:
 
@@ -40,7 +40,9 @@ Total: 24
 * **guildinfo:** Fetches information about the current guild.
 * **help:** Lists all of my commands and the information you need to use them.
 * **info:** Information about me, myself and I.
+* **invite:** Returns urls for you to invite me with, read my docs, and join my support server.
 * **ping:** Pong. In all honestly though this is used to determine bot latency.
 * **prefix:** Lists my command prefixes.
+* **privacy:** Shows VV's extremely in-depth and complicated (/s) privacy policy.
 * **snowflake:** Converts a snowflake to a human-readable timestamp.
 * **stats:** On the dot runtime statistics.
