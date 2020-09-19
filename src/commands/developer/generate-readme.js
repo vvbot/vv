@@ -33,10 +33,10 @@ module.exports = class GenerateCommandsCommand extends Command {
         let text = `## General Information\n\nCurrent Prefixes: \`${this.client.prefix}\`, mentions\n\nTotal Commands: ${this.client.commandHandler.modules.size}\n\nWebsite: ${this.client.urls.info}\n\n## Available Commands\n${list.join("\n")}`;
 
         if(!readme) {
-            return msg.util.send("Successfully generated `commands.txt`.", {
+            return msg.util.send("Successfully generated `generated.txt`.", {
                 files: [{
                     attachment: Buffer.from(text),
-                    name: "commands.txt"
+                    name: "generated.txt"
                 }]
             });
         } else if(readme) {
