@@ -74,7 +74,7 @@ module.exports = class HelpCommand extends Command {
                 .setDescription(`${this.client.commandHandler.modules.filter(c => {
                     if ((!c.disabled || !c.hidden) && !this.client.isOwner(msg.author)) return true;
                     else return true;
-                }).keyArray().join(", ")}\n\nUse \`${this.client.prefix}help <category>\` to see more information about a specific category.\nUse \`${this.client.prefix}help <command>\` to see more information about a specific command.\nIse \`${this.client.prefix}help arguments\`to see more information about command arguments.`);
+                }).keyArray().join(", ")}\n\nUse \`${this.client.prefix}help <category>\` to see more information about a specific category.\nUse \`${this.client.prefix}help <command>\` to see more information about a specific command.\nUse \`${this.client.prefix}help arguments\`to see more information about command arguments.`);
 
             return msg.util.send(embed);
         } else if (cmd == "args" || cmd == "arguments") {
