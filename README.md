@@ -2,6 +2,7 @@
     <img src="./assets/image/VV Logo.png" height=250px />
     <h2>The Discord bot you <u>do not</u> want to mess with.</h2>
 </div>
+
 > VV is currently in a limited-beta state. This means that the bot is not active 100% of the time, and commands may be unstable as they're actively worked on.
 
 VV is a feature-complete Discord bot with an attitude. She's updated weekly and always has something new to show off.
@@ -9,7 +10,7 @@ VV is a feature-complete Discord bot with an attitude. She's updated weekly and 
 ## Available Commands:
 
 
-Total: 26
+Total: 27
 
 ### Developer:
 
@@ -48,3 +49,4 @@ Total: 26
 * **privacy:** Shows VV's extremely in-depth and complicated (/s) privacy policy.
 * **snowflake:** Converts a snowflake to a human-readable timestamp.
 * **stats:** On the dot runtime statistics.
+* **changelog:** Returns VV's ten most recent commits and changes.

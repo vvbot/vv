@@ -9,6 +9,7 @@ export class VVClient extends AkairoClient {
     public presenceDelay: number;
     
     public urls: {
+        github: string,
         server: string,
         info: string,
         me: string,

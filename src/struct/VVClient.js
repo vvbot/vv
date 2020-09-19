@@ -22,8 +22,9 @@ module.exports = class VVClient extends AkairoClient {
         this.presenceDelay = 300000;
 
         this.urls = {
+            githun: "https://github.com/vvbot/vv",
             server: "https://discord.gg/cYxEDNN",
-            info: "https://github.com/vvbot/vv",
+            info: "https://vv.axelg.xyz",
             me: "https://discord.com/api/oauth2/authorize?client_id=378909180666314754&permissions=388160&scope=bot"
         }
 
