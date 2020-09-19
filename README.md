@@ -10,16 +10,24 @@ VV is a feature-complete Discord bot with an attitude. She's updated weekly and 
 ## Available Commands:
 
 
-Total: 27
+## General Information
+
+Current Prefixes: `>`, mentions
+
+Total Commands: 27
+
+Website: https://vv.axelg.xyz
+
+## Available Commands
 
 ### Developer:
 
 * **eval:** Evaluate and execute code from within the bot process. (Owner-Only)
-* **generate-commands:** Generates the commands list for my README. (Owner-Only)
 * **load:** Load a new command into the bot process. (Owner-Only)
 * **reload:** Reload a command from within the bot process. (Owner-Only)
 * **unload:** Unload a command from the bot process. (Owner-Only)
 * **webhook:** Sends a message through one of **my** bots. Checkmate atheists. (Owner-Only)
+* **generate-readme:** Generates the information found in my README. (Owner-Only)
 
 ### Fun:
 
@@ -37,6 +45,7 @@ Total: 27
 ### Utility:
 
 * **avatar:** View the avatar of a user or yourself.
+* **changelog:** Returns VV's ten most recent commits and changes.
 * **debug:** Debug information for VV
 * **discriminator:** Searches the current guild for users with the given discriminator.
 * **guildemojis:** Returns all of the current guild's emojis.
@@ -49,4 +58,3 @@ Total: 27
 * **privacy:** Shows VV's extremely in-depth and complicated (/s) privacy policy.
 * **snowflake:** Converts a snowflake to a human-readable timestamp.
 * **stats:** On the dot runtime statistics.
-* **changelog:** Returns VV's ten most recent commits and changes.
