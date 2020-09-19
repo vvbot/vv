@@ -6,16 +6,16 @@ const { capitalize } = require("../../util/utils");
 
 module.exports = class GenerateCommandsCommand extends Command {
     constructor() {
-        super("generate-readme", {
-            aliases: ["gen-readme", "gen-rdme"],
-            description: "Generates the information found in my README.",
+        super("generate-commands", {
+            aliases: ["generate-commands", "gen-commands", "generate-cmds", "gen-cmds"],
+            description: "Generates the commands list for my README.",
             ownerOnly: true,
             typing: true,
             args: [
                 {
                     id: "readme",
                     match: "flag",
-                    flag: "--append"
+                    flag: "--append-to-readme"
                 }
             ]
         });
@@ -30,7 +30,7 @@ module.exports = class GenerateCommandsCommand extends Command {
                 }).join("\n")}`;
         });
 
-        let text = `## General Information\n\nCurrent Prefixes: \`${this.client.prefix}\`, mentions\nTotal Commands: ${this.client.commandHandler.modules.size}\nWebsite: ${this.client.urls.info}\n\n## Available Commands\n${list.join("\n")}`;
+        let text = `Total: ${this.client.commandHandler.modules.size}\n${list.join("\n")}`;
 
         if(!readme) {
             return msg.util.send("Successfully generated `commands.txt`.", {
