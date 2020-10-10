@@ -10,7 +10,6 @@ module.exports = class LoadCommand extends Command {
             ownerOnly: true,
             typing: true,
             args: [
-
                 {
                     id: "cmd",
                     prompt: {

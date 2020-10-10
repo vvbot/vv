@@ -18,7 +18,7 @@ module.exports = class InfoCommand extends Command {
             .setDescription(stripIndents`              
                 I was made by Axel ${findMember(msg, this.client.ownerID[0], false) ? "(<@!" + findMember(msg, this.client.ownerID[0], false) + ">)" : ""} in Node.JS using the Discord.JS and Akairo libraries.
 
-                I'm currently sitting in **${this.client.guilds.cache.size}** server${(this.client.guilds.cache.size > 1 ? "s" : "")}. I have **${this.client.commandHandler.modules.size}** active commands, and a total uptime of **${uptime().humanized}**.
+                I'm currently sitting in **${this.client.guilds.cache.size}** server${(this.client.guilds.cache.size > 1 ? "s" : "")}. I have **${this.client.commandHandler.modules.size}** useable commands, and a total uptime of **${uptime().humanized}**.
             
                 You can find my documentation [here](${this.client.urls.info}), join my support server [here](${this.client.urls.server}), or invite me to your server [here](${this.client.urls.me}).
             `)

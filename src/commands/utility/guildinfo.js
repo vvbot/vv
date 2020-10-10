@@ -4,7 +4,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = class GuildInfoCommand extends Command {
     constructor() {
         super("guildinfo", {
-            aliases: ["guildinfo"],
+            aliases: ["guildinfo", "server-info", "serverinfo"],
             description: "Fetches information about the current guild.",
             channel: "guild",
             typing: true

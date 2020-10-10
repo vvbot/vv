@@ -12,14 +12,6 @@ module.exports = class StatsCommand extends Command {
     }
     
     async exec(msg) {
-        /*
-        const { data: updated } = await axios({
-            url: "https://api.github.com/repos/axelgreavette/vv/commits",
-            method: "get",
-            headers: {
-                "User-Agent": "VV"
-            }
-        }); */
         let sent = await msg.util.send("Crunching numbers...");
 
         const embed = new MessageEmbed()

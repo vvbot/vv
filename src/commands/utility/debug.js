@@ -9,17 +9,7 @@ module.exports = class DebugCommand extends Command {
         super("debug", {
             aliases: ["debug"],
             description: "Debug information for VV",
-            typing: true,
-            args: [
-                {
-                    id: "a",
-                    type: "string"
-                },
-                {
-                    id: "b",
-                    type: "string"
-                }
-            ]
+            typing: true
         });
     }
     

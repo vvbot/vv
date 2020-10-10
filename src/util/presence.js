@@ -10,7 +10,7 @@ module.exports = [
     { type: 2, name: "my Indie playlist" },
     { type: 0, name: "with a puzzle" },
     { type: 4, name: "streams" },
-    { type: 3, name: "naughty 1things" },
+    { type: 3, name: "naughty things" },
     { type: 3, name: "the fish" },
     { type: 1, name: "in the bath" },
     { type: 1, name: "with my encryption" },
@@ -23,4 +23,10 @@ module.exports = [
     { type: 3, name: "RE:ZERO" },
     { type: 4, name: "Axel's cat Pepper" },
     { type: 4, name: "Axel's cat Salty" },
+    { type: 3, name: "YmlyZSBQbmZmdnFs" },
+    { type: 0, name: "Mondegreen" },
+    { type: 0, name: "Cards Against Humanity" },
+    { type: 2, name: "Childish Gambino" },
+    { type: 0, name: "with Medusa" },
+    { type: 2, name: "the Siren's song" }
 ];
